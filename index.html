@@ -49,21 +49,18 @@
             box-shadow: 0 6px 18px rgba(0,0,0,0.25);
         }
 
-        /* Квадрат 1 — сайт про кота */
         .cat-site {
-            background: #f2e9dd;
+            background: linear-gradient(135deg, #ffe6c7, #ffd19b);
             color: #5a3b00;
             border: 3px solid #ffb75e;
         }
 
-        /* Квадрат 2 — сайт про Витебск */
         .vitebsk-site {
-            background: #e6ebff;
+            background: linear-gradient(135deg, #c6d8ff, #9bb8ff);
             color: #0f2a70;
             border: 3px solid #5d7ee0;
         }
 
-        /* Квадрат 3 — сайт в разработке */
         .construction {
             background: repeating-linear-gradient(
                 45deg,
@@ -83,11 +80,11 @@
 
 <div class="projects">
 
-   <a href="./1/" target="_blank" class="project-box">
+    <a href="./1/index.html" target="_blank" class="project-box cat-site">
         🐱 Обязанности кота
     </a>
 
-    <a href="./2/" target="_blank" class="project-box">
+    <a href="./2/index.html" target="_blank" class="project-box vitebsk-site">
         🌆 Город Витебск
     </a>
 
@@ -97,33 +94,5 @@
 
 </div>
 
-<script>
-
-document.addEventListener('DOMContentLoaded', function(){
-  document.querySelectorAll('.project-box').forEach(function(a){
-    
-    a.addEventListener('click', function(e){
-      var href = a.getAttribute('href');
-     
-      if(!href || href.trim() === '#' || href.trim() === ''){
-        e.preventDefault();
-        alert('Сайт пока в разработке.');
-        return;
-      }
-    
-      e.preventDefault();
-      try{
-        var w = window.open(href, '_blank');
-        if(!w){ 
-          window.location.href = href;
-        }
-      }catch(err){
-        window.location.href = href;
-      }
-      return false;
-    });
-  });
-});
-</script>
 </body>
 </html>
