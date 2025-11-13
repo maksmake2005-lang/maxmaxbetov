@@ -1,19 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мои проекты</title>
-</head>
-<body>
-      <style> 
-        h1
-        {
-text-align: center;
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 30px;
+            color: #1b2b5f;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            padding: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .project-box {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            height: 180px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #222;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .project-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+
+        /* Квадрат 1 — сайт про кота */
+        .cat-site {
+            background: linear-gradient(135deg, #ffe6c7, #ffd19b);
+            color: #5a3b00;
+            border: 3px solid #ffb75e;
+        }
+
+        /* Квадрат 2 — сайт про Витебск */
+        .vitebsk-site {
+            background: linear-gradient(135deg, #c6d8ff, #9bb8ff);
+            color: #0f2a70;
+            border: 3px solid #5d7ee0;
+        }
+
+        /* Квадрат 3 — сайт в разработке */
+        .construction {
+            background: repeating-linear-gradient(
+                45deg,
+                #fff3cd,
+                #fff3cd 15px,
+                #f2c94c 15px,
+                #f2c94c 30px
+            );
+            border: 3px solid #b8860b;
+            color: #705300;
         }
     </style>
-    <h1>Главная страница</h1>
-<a href="1/" target="_blank"> Обязанности кота </a>
+</head>
+<body>
+
+<h1>Мои проекты</h1>
+
+<div class="projects">
+
+    <a href="koshara.html" target="_blank" class="project-box cat-site">
+        🐱 Обязанности кота
+    </a>
+
+    <a href="vitebsk.html" target="_blank" class="project-box vitebsk-site">
+        🌆 Город Витебск
+    </a>
+
+    <a href="#" class="project-box construction">
+        🚧 В разработке
+    </a>
+
+</div>
+
 </body>
 </html>
