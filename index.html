@@ -40,7 +40,6 @@
             font-size: 20px;
             font-weight: bold;
             text-decoration: none;
-            color: #222;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -49,18 +48,21 @@
             box-shadow: 0 6px 18px rgba(0,0,0,0.25);
         }
 
+        /* Квадрат 1 — сайт про кота */
         .cat-site {
-            background: linear-gradient(135deg, #ffe6c7, #ffd19b);
-            color: #5a3b00;
+            background: #f2e9dd; /* светлый бежевый фон */
+            color: #5a3b00;      /* тёмный текст */
             border: 3px solid #ffb75e;
         }
 
+        /* Квадрат 2 — сайт про Витебск */
         .vitebsk-site {
-            background: linear-gradient(135deg, #c6d8ff, #9bb8ff);
+            background: #dce8ff; /* светлый фон для города */
             color: #0f2a70;
             border: 3px solid #5d7ee0;
         }
 
+        /* Квадрат 3 — сайт в разработке */
         .construction {
             background: repeating-linear-gradient(
                 45deg,
@@ -80,14 +82,17 @@
 
 <div class="projects">
 
-    <a href="./1/index.html" target="_blank" class="project-box cat-site">
+    <!-- Ссылка на сайт кота -->
+    <a href="./1/" target="_blank" class="project-box cat-site">
         🐱 Обязанности кота
     </a>
 
-    <a href="./2/index.html" target="_blank" class="project-box vitebsk-site">
+    <!-- Ссылка на сайт Витебска -->
+    <a href="vitebsk.html" target="_blank" class="project-box vitebsk-site">
         🌆 Город Витебск
     </a>
 
+    <!-- В разработке -->
     <a href="#" class="project-box construction">
         🚧 В разработке
     </a>
