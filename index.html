@@ -83,11 +83,11 @@
 
 <div class="projects">
 
-    <a href="index.html" target="_blank" class="project-box cat-site">
+   <a href="./1/" target="_blank" class="project-box">
         🐱 Обязанности кота
     </a>
 
-    <a href="vitebsk.html" target="_blank" class="project-box vitebsk-site">
+    <a href="./2/" target="_blank" class="project-box">
         🌆 Город Витебск
     </a>
 
@@ -98,23 +98,23 @@
 </div>
 
 <script>
-// Надёжная обработка кликов по карточкам-проектам
+
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('.project-box').forEach(function(a){
-    // если это не ссылка или пустая ссылка — показываем сообщение
+    
     a.addEventListener('click', function(e){
       var href = a.getAttribute('href');
-      // Если нет реального адреса — предупреждаем и не пытаемся открыть
+     
       if(!href || href.trim() === '#' || href.trim() === ''){
         e.preventDefault();
         alert('Сайт пока в разработке.');
         return;
       }
-      // Стараемся открыть в новой вкладке безопасно
+    
       e.preventDefault();
       try{
         var w = window.open(href, '_blank');
-        if(!w){ // если блокируется попап-блокером — переходим в том же окне
+        if(!w){ 
           window.location.href = href;
         }
       }catch(err){
