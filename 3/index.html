@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение Автомобилей</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- БАЗОВЫЕ СТИЛИ -->
+    <style>
+        body {
+            background-color: #09090b; /* Тёмный фон */
+            color: #f4f4f5; /* Светлый текст */
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+        }
+        ::selection {
+            background-color: #7f1d1d;
+            color: white;
+        }
+        /* Небольшая фиксация для растягивания локальной фоновой картинки */
+        .bg-local {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<header class="relative h-[60vh] flex items-center justify-center overflow-hidden">
+
+ 
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-zinc-950 z-10"></div>
+
+
+    <img 
+        src="salon.jpg"
+        alt="Фон" 
+        class="bg-local"
+    >
+
+    <div class="relative z-20 text-center px-4">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4 text-white">
+            СРАВНЕНИЕ АВТО
+        </h1>
+        <p class="text-xl text-gray-400 tracking-widest uppercase">
+            Выбираем лучшее из лучших
+        </p>
+    </div>
+</header>
+
+<main class="container mx-auto px-4 py-16">
+
+    <div class="overflow-x-auto">
+
+
+        <table class="w-full text-left border-collapse">
+
+   
+            <caption class="text-2xl text-gray-400 mb-8 text-left uppercase">
+                Технические Характеристики
+            </caption>
+
+            <thead>
+                <tr class="border-b border-gray-800">
+
+                    <th class="p-4 text-gray-500 font-normal w-1/4">
+                        ХАРАКТЕРИСТИКА
+                    </th>
+
+                    <th class="p-4 w-1/4">
+                        <div class="flex flex-col gap-4">
+                            <img 
+                                src="cybertruck.jpg" 
+                                class="rounded-lg w-full h-48 object-cover"
+                                alt="Tesla CyberTruck"
+                            >
+                            <h3 class="text-xl font-bold">Tesla CyberTruck</h3>
+                        </div>
+                    </th>
+
+                    <th class="p-4 w-1/4">
+                        <div class="flex flex-col gap-4">
+                            <img 
+                                src="scoda.jpg" 
+                                class="rounded-lg w-full h-48 object-cover"
+                                alt="Skoda Superb"
+                            >
+                            <h3 class="text-xl font-bold">Skoda Superb</h3>
+                        </div>
+                    </th>
+
+                    <th class="p-4 w-1/4">
+                        <div class="flex flex-col gap-4">
+                            <img 
+                                src="shpak.jpg" 
+                                class="rounded-lg w-full h-48 object-cover"
+                                alt="BMW M5"
+                            >
+                            <h3 class="text-xl font-bold">BMW M5</h3>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-800">
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal">Цена</th>
+                    <td class="p-4">
+                        $99,990
+                    </td>
+                    <td class="p-4">
+                        <mark class="bg-green-900 text-green-200 px-2 py-1 rounded">
+                            $55,000 (Выгодно)
+                        </mark>
+                    </td>
+                    <td class="p-4">
+                        <mark class="bg-red-900 text-red-200 px-2 py-1 rounded">
+                            $135,000 (Дорого)
+                        </mark>
+                    </td>
+                </tr>
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal">Двигатель</th>
+                    <td class="p-4">Электро (3 мотора)</td>
+                    <td class="p-4">2.0L TSI Turbo</td>
+                    <td class="p-4">4.4L V8 Twin-Turbo</td>
+                </tr>
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal">Разгон 0-100 км/ч</th>
+                    <td class="p-4 font-bold text-white">2.6 сек</td>
+                    <td class="p-4">5.2 сек</td>
+                    <td class="p-4">3.3 сек</td>
+                </tr>
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal">Макс. скорость</th>
+                    <td class="p-4">209 км/ч</td>
+                    <td class="p-4">250 км/ч</td>
+                    <td class="p-4">305 км/ч</td>
+                </tr>
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal">Эко-сертификат</th>
+                    <td class="p-4 text-green-400">Есть ✔</td>
+                    <td class="p-4 text-gray-500">Евро-6d</td>
+                    <td class="p-4 text-gray-500">Нет</td>
+                </tr>
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal">Коробка передач</th>
+                    <td class="p-4">Автомат (1 ст.)</td>
+                    <td class="p-4">Робот DSG (7 ст.)</td>
+                    <td class="p-4">Автомат (8 ст.)</td>
+                </tr>
+
+                <tr class="hover:bg-gray-900 transition-colors">
+                    <th class="p-4 text-gray-400 font-normal align-top">Инфо</th>
+
+                    <td class="p-4 align-top">
+                        <details class="cursor-pointer">
+                            <summary class="text-gray-300 hover:text-white">Подробнее...</summary>
+                            <p class="mt-2 text-sm text-gray-400">DRIVING IN MY CAAAAAAAAAAAAAR RIGHT AFTER A BEEEEEEEEEEEEEEEEEEEEER HEY THAT BUMP IS SHAPED</p>
+                        </details>
+                    </td>
+
+                    <td class="p-4 align-top">
+                        <details class="cursor-pointer">
+                            <summary class="text-gray-300 hover:text-white">Подробнее...</summary>
+                            <p class="mt-2 text-sm text-gray-400">ЧЕХОСЛОВАКИЯ, ОНА ТАКАЯ....</p>
+                        </details>
+                    </td>
+
+                    <td class="p-4 align-top">
+                        <details class="cursor-pointer">
+                            <summary class="text-gray-300 hover:text-white">Подробнее...</summary>
+                            <p class="mt-2 text-sm text-gray-400">Баланс бизнес-седана и спортивного болида.</p>
+                        </details>
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tfoot>
+                <tr class="border-t border-gray-800">
+                    <td colspan="4" class="p-4 text-sm text-gray-500 italic text-center">
+                        Цены указаны как "Прямо с завода", без учета доставки и т.д. Так что никаких перекупов
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+    </div>
+
+</main>
+
+</body>
+</html>
