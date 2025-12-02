@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение моделей Porsche</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+        ::selection {
+            background-color: #7f1d1d;
+            color: white;
+        }
+        .bg-local {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+        }
+        progress {
+            border-radius: 7px; 
+            height: 12px;
+            width: 100%;
+        }
+        progress::-webkit-progress-bar {
+            background-color: #27272a;
+            border-radius: 7px;
+        }
+        progress::-webkit-progress-value {
+            background-color: #dc2626;
+            border-radius: 7px;
+        }
+        progress::-moz-progress-bar {
+            background-color: #dc2626;
+            border-radius: 7px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="relative h-[60vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-zinc-950 z-10"></div>
+
+    <img 
+        src="https://images.unsplash.com/photo-1662531478531-25d83519c9ff?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920"
+        alt="Porsche Showroom Background" 
+        class="bg-local"
+    >
+
+    <div class="relative z-20 text-center px-4">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4 text-white tracking-tight">
+            PORSCHE
+        </h1>
+        <p class="text-xl text-gray-400 tracking-widest uppercase">
+            Сравнение легендарных моделей
+        </p>
+    </div>
+</header>
+
+<nav class="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800">
+    <div class="container mx-auto px-4 py-4 flex justify-center gap-8 text-sm md:text-base font-medium uppercase tracking-wider">
+        <a href="#comparison-table" class="text-gray-400 hover:text-white transition-colors">Сравнение</a>
+        <a href="#details-section" class="text-gray-400 hover:text-white transition-colors">Детали</a>
+        <a href="#facts-section" class="text-gray-400 hover:text-white transition-colors">Факты</a>
+    </div>
+</nav>
+
+<main class="container mx-auto px-4 py-16">
+    <section id="comparison-table" class="mb-20">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <caption class="text-2xl text-gray-400 mb-8 text-left uppercase font-light">
+                    Технические Характеристики
+                </caption>
+
+                <thead>
+                    <tr class="border-b border-gray-800">
+                        <th class="p-4 text-gray-500 font-normal w-1/4 align-bottom">ХАРАКТЕРИСТИКА</th>
+
+                        <section class="max-w-4xl mx-auto text-center mb-20">
+                            <blockquote class="text-2xl md:text-3xl font-light italic text-gray-300 leading-relaxed">
+                                "В начале я огляделся и не смог найти автомобиль своей мечты. Поэтому я решил создать его сам."
+                            </blockquote>
+                            <cite class="block mt-6 text-red-500 font-bold uppercase tracking-widest not-italic">
+                                — Ферри Порше
+                            </cite>
+                        </section>
+
+                        <th class="p-4 w-1/4 min-w-[250px]">
+                            <div class="flex flex-col gap-4">
+                                <figure class="relative group">
+                                    <img 
+                                        src="911.jpg" 
+                                        class="rounded-lg w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                                        alt="Porsche 911"
+                                    >
+                                    <figcaption class="sr-only">Porsche 911</figcaption>
+                                </figure>
+                                <h3 class="text-xl font-bold text-white">Porsche 911</h3>
+                            </div>
+                        </th>
+
+                        <th class="p-4 w-1/4 min-w-[250px]">
+                            <div class="flex flex-col gap-4">
+                                <figure class="relative group">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1699325974549-fd06639650aa?ixlib=rb-4.1.0&q=80&w=800&h=500&fit=crop" 
+                                        class="rounded-lg w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                                        alt="Porsche Cayenne"
+                                    >
+                                    <figcaption class="sr-only">Porsche Cayenne</figcaption>
+                                </figure>
+                                <h3 class="text-xl font-bold text-white">Porsche Cayenne</h3>
+                            </div>
+                        </th>
+
+                        <th class="p-4 w-1/4 min-w-[250px]">
+                            <div class="flex flex-col gap-4">
+                                <figure class="relative group">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1601929862217-f1bf94503333?ixlib=rb-4.1.0&q=80&w=800&h=500&fit=crop" 
+                                        class="rounded-lg w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                                        alt="Porsche Panamera"
+                                    >
+                                    <figcaption class="sr-only">Porsche Panamera</figcaption>
+                                </figure>
+                                <h3 class="text-xl font-bold text-white">Porsche Panamera</h3>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-800">
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Начальная цена</th>
+                        <td class="p-4"><mark class="bg-red-900/30 text-red-200 px-2 py-1 rounded border border-red-900/50">от $114,400</mark></td>
+                        <td class="p-4"><mark class="bg-green-900/30 text-green-200 px-2 py-1 rounded border border-green-900/50">от $79,200</mark></td>
+                        <td class="p-4"><span class="text-gray-300">от $92,400</span></td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Тип двигателя</th>
+                        <td class="p-4">Оппозитный (Boxer)</td>
+                        <td class="p-4">V6 / V8 / Гибрид</td>
+                        <td class="p-4">V6 / V8 / Гибрид</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Разгон 0-100 км/ч</th>
+                        <td class="p-4 font-bold text-white text-lg">3.7 сек</td>
+                        <td class="p-4">5.7 сек</td>
+                        <td class="p-4">5.3 сек</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Макс. скорость</th>
+                        <td class="p-4 text-white">308 км/ч</td>
+                        <td class="p-4">248 км/ч</td>
+                        <td class="p-4">272 км/ч</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Трансмиссия</th>
+                        <td class="p-4">Робот PDK (8 ст.)</td>
+                        <td class="p-4">Автомат Tiptronic S (8 ст.)</td>
+                        <td class="p-4">Робот PDK (8 ст.)</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Габариты (ДxШxВ)</th>
+                        <td class="p-4 text-sm text-gray-400">4519 x 1852 x 1298 мм</td>
+                        <td class="p-4 text-sm text-gray-400">4930 x 1983 x 1698 мм</td>
+                        <td class="p-4 text-sm text-gray-400">5049 x 1937 x 1423 мм</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Объем багажника</th>
+                        <td class="p-4">132 л</td>
+                        <td class="p-4 text-green-400 font-medium">772 л</td>
+                        <td class="p-4">495 л</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal">Расход топлива</th>
+                        <td class="p-4">~10.8 л/100 км</td>
+                        <td class="p-4">~11.5 л/100 км</td>
+                        <td class="p-4">~10.5 л/100 км</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal align-middle">Рейтинг безопасности</th>
+                        <td class="p-4 align-middle">
+                            <div class="w-full max-w-[150px]">
+                                <progress value="95" max="100"></progress>
+                                <span class="text-xs text-gray-500 mt-1 block">Высокий</span>
+                            </div>
+                        </td>
+                        <td class="p-4 align-middle">
+                            <div class="w-full max-w-[150px]">
+                                <progress value="100" max="100"></progress>
+                                <span class="text-xs text-gray-500 mt-1 block">Euro NCAP 5★</span>
+                            </div>
+                        </td>
+                        <td class="p-4 align-middle">
+                            <div class="w-full max-w-[150px]">
+                                <progress value="98" max="100"></progress>
+                                <span class="text-xs text-gray-500 mt-1 block">Высокий</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-900/50 transition-colors">
+                        <th class="p-4 text-gray-400 font-normal align-top">Подробнее</th>
+                        <td class="p-4 align-top">
+                            <details class="group cursor-pointer">
+                                <summary class="text-gray-300 hover:text-white font-medium flex items-center gap-2">
+                                    <span class="group-open:rotate-90 transition-transform">▶</span>Системы
+                                </summary>
+                                <div class="mt-4 text-sm text-gray-400 space-y-2 pl-4 border-l border-gray-800">
+                                    <p>• Porsche Stability Management (PSM)</p>
+                                    <p>• Керамические тормоза (PCCB)</p>
+                                    <p>• Режим Wet Mode</p>
+                                    <p>• Launch Control</p>
+                                </div>
+                            </details>
+                        </td>
+
+                        <td class="p-4 align-top">
+                            <details class="group cursor-pointer">
+                                <summary class="text-gray-300 hover:text-white font-medium flex items-center gap-2">
+                                    <span class="group-open:rotate-90 transition-transform">▶</span>Системы
+                                </summary>
+                                <div class="mt-4 text-sm text-gray-400 space-y-2 pl-4 border-l border-gray-800">
+                                    <p>• Адаптивная пневмоподвеска</p>
+                                    <p>• Offroad режимы</p>
+                                    <p>• PDCC (контроль шасси)</p>
+                                    <p>• Матричные фары LED</p>
+                                </div>
+                            </details>
+                        </td>
+
+                        <td class="p-4 align-top">
+                            <details class="group cursor-pointer">
+                                <summary class="text-gray-300 hover:text-white font-medium flex items-center gap-2">
+                                    <span class="group-open:rotate-90 transition-transform">▶</span>Системы
+                                </summary>
+                                <div class="mt-4 text-sm text-gray-400 space-y-2 pl-4 border-l border-gray-800">
+                                    <p>• Porsche InnoDrive</p>
+                                    <p>• Подруливающая задняя ось</p>
+                                    <p>• Ночное видение</p>
+                                    <p>• 4-зонный климат</p>
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tfoot>
+                    <tr class="border-t border-gray-800">
+                        <td colspan="4" class="p-6 text-sm text-gray-500 italic text-center">
+                            * Цены и характеристики могут варьироваться. Данные актуальны на <time datetime="2025-12-02">декабрь 2025</time>.
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+ <section id="facts-section" class="max-w-3xl mx-auto text-center mb-20">
+        <aside class="bg-zinc-900/50 p-10 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors">
+            <h4 class="text-red-500 font-bold mb-4 uppercase tracking-wider text-2xl">
+                МОЯ ЛИЧНАЯ МЕЧТА — Porsche 911
+            </h4>
+
+            <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                Несмотря на весьма провоцирующий номер, Porsche 911 считается легендой.
+                Её дизайн остаётся неизменным десятилетиями. Машина появлялась во многих играх,
+                включая любимый транспорт легендарного рокера Джонни Сильверхенда. NEVER FADE AWAY!
+            </p>
+
+            <img 
+                src="Johnny.jpg"
+                class="rounded-lg w-full h-64 object-cover mx-auto transition-transform duration-500 hover:scale-105"
+                alt="Porsche 911"
+            >
+        </aside>
+    </section>
+    <!-- Быстрое сравнение кузовов -->
+    <section class="max-w-2xl mx-auto mb-20">
+        <h3 class="text-xl text-gray-400 mb-6 uppercase font-light text-center">Быстрое сравнение кузовов</h3>
+        <div class="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-900/30">
+            <div class="grid grid-cols-3 bg-zinc-900 border-b border-zinc-800 p-3 font-bold text-gray-300 text-sm uppercase tracking-wider">
+                <div>Модель</div>
+                <div>Тип кузова</div>
+                <div>Привод</div>
+            </div>
+
+            <div class="grid grid-cols-3 p-3 border-b border-zinc-800/50 text-gray-400 text-sm hover:bg-zinc-800/30">
+                <div>911</div>
+                <div>Купе / Кабриолет</div>
+                <div>Задний / Полный</div>
+            </div>
+
+            <div class="grid grid-cols-3 p-3 border-b border-zinc-800/50 text-gray-400 text-sm hover:bg-zinc-800/30">
+                <div>Cayenne</div>
+                <div>SUV</div>
+                <div>Полный</div>
+            </div>
+
+            <div class="grid grid-cols-3 p-3 text-gray-400 text-sm hover:bg-zinc-800/30">
+                <div>Panamera</div>
+                <div>Лифтбек / Туризмо</div>
+                <div>Задний / Полный</div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="border-t border-zinc-900 bg-zinc-950 py-12 text-center">
+    <p class="text-gray-600 text-sm">&copy; Сайт приналлежит самому чумбанутому автофиксеру Найт-Сити!</p>
+</footer>
+
+</body>
+</html>
