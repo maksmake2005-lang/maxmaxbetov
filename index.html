@@ -75,6 +75,7 @@
                         0 0 10px rgba(0,0,0,0.25);
             font-size: 18px;
         }
+
         .porsche {
             background: linear-gradient(
                 135deg,
@@ -86,6 +87,58 @@
             color: #f2f2f2;
             font-size: 22px;
             letter-spacing: 1px;
+        }
+
+        /* CYBERPUNK контейнер — неон + царапины */
+        .cyberpunk {
+            position: relative;
+            background: #fcee09;        /* фирменный жёлтый */
+            border: 3px solid #000;     /* черная рамка */
+            color: #000;
+            font-size: 24px;
+            font-weight: 900;           /* жирнее */
+            letter-spacing: 2px;
+
+            /* неоновая подсветка */
+            text-shadow: 
+                0 0 6px #00eaff,
+                0 0 12px #00eaff,
+                0 0 4px #000;
+
+            box-shadow:
+                0 0 20px rgba(255, 255, 0, 0.6),
+                inset 0 0 12px rgba(0, 0, 0, 0.25);
+
+            border-radius: 15px;
+            overflow: hidden; /* нужно для царапин */
+        }
+
+        /* "поцарапанный" эффект — легкий, ненавязчивый */
+        .cyberpunk::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+
+            background-image:
+                repeating-linear-gradient(
+                    115deg,
+                    rgba(0, 0, 0, 0.12) 0px,
+                    rgba(0, 0, 0, 0.12) 1px,
+                    transparent 4px,
+                    transparent 7px
+                );
+            opacity: 0.25; /* царапины нежные, не мешают тексту */
+        }
+
+        .cyberpunk:hover {
+            transform: scale(1.05);
+            box-shadow:
+                0 0 28px rgba(255, 255, 0, 0.8),
+                inset 0 0 16px rgba(0, 0, 0, 0.35);
         }
     </style>
 </head>
@@ -106,8 +159,14 @@
     <a href="./3/" class="project-box cars">
         Сравнение автомобилей
     </a>
-    <a href="./4/" target="_blank"  class="project-box porsche">
+
+    <a href="./4/" target="_blank" class="project-box porsche">
         Porsche
+    </a>
+
+    <!-- Новый Cyberpunk контейнер -->
+    <a href="./5/" target="_blank" class="project-box cyberpunk">
+        Найт-Сити
     </a>
 
 </div>
