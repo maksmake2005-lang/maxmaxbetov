@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Night City | City of Dreams</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cp-yellow: #FCEE0A;
+            --cp-blue: #00F0FF;
+            --cp-red: #FF003C;
+            --cp-black: #050505;
+            --cp-dark-grey: #1a1a1a;
+            --cp-font-main: 'Rajdhani', sans-serif;
+            --cp-font-mono: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--cp-black);
+            color: aquamarine;
+            text-shadow: aqua 1px 1px 3px;
+            font-style: italic;
+            font-family: var(--cp-font-main);
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        .highlight-hover {
+            transition: color 0.3s ease; 
+            position: relative;
+        }
+        
+        .highlight-hover:hover {
+            color: var(--cp-blue);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+
+        .cp-button {
+            background-color: rgba(0, 240, 255, 0.1);
+            border: 2px solid var(--cp-blue);
+            color: var(--cp-blue);
+            padding: 12px 35px;
+            font-family: var(--cp-font-main);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            cursor: pointer;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Removed transform */
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cp-button:hover {
+            background-color: var(--cp-blue);
+            color: var(--cp-black);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        header {
+            background-color: rgba(5, 5, 5, 0.95);
+            border-bottom: 2px solid var(--cp-yellow);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cp-yellow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px var(--cp-red);
+            cursor: default;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: aquamarine;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+
+
+        nav a:hover {
+            color: var(--cp-blue);
+            text-decoration: underline;
+        }
+
+        .hero {
+            height: 85vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1605218427368-35b0f996d916?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--cp-red);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 240, 255, 0.03) 3px
+            );
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 7rem;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            color: var(--cp-yellow);
+            text-shadow: 4px 4px 0px #000;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.6rem;
+            max-width: 700px;
+            margin-bottom: 50px;
+            background-color: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-left: 4px solid var(--cp-red);
+            border-right: 4px solid var(--cp-red);
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+
+        section {
+            padding: 100px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            border-left: 15px solid var(--cp-yellow);
+            padding-left: 30px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 2px;
+        }
+
+        .section-title span {
+            color: var(--cp-yellow);
+            margin-right: 15px;
+            font-family: var(--cp-font-mono);
+        }
+
+        /* History Section */
+        .history-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .history-text {
+            font-size: 1.2rem;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        .history-text p {
+            margin-bottom: 25px;
+        }
+
+        .history-img-container {
+            position: relative;
+        }
+
+        .history-img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            clip-path: polygon(40px 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%, 0 40px);
+            border: 2px solid var(--cp-yellow);
+            filter: grayscale(20%) contrast(110%);
+            transition: filter 0.3s ease;
+        }
+
+        .history-img:hover {
+            filter: grayscale(0%) contrast(100%);
+        }
+
+        /* Legends Section */
+        .legends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .legend-card {
+            background-color: var(--cp-dark-grey);
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Removed transform */
+        }
+
+        .legend-card:hover {
+            /* transform: translateY(-10px); REMOVED */
+            border-color: var(--cp-blue);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1);
+        }
+
+        .legend-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            object-position: top;
+            border-bottom: 4px solid var(--cp-red);
+            /* transition: transform 0.5s ease; REMOVED */
+        }
+
+        .legend-card:hover .legend-img {
+            /* transform: scale(1.05); REMOVED */
+        }
+
+        .legend-info {
+            padding: 25px;
+        }
+
+        .legend-name {
+            font-size: 2rem;
+            color: var(--cp-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .legend-desc {
+            font-family: var(--cp-font-mono);
+            font-size: 1rem;
+            color: aquamarine; /* Match global */
+            line-height: 1.6;
+        }
+
+        /* Events Section */
+        .events-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .event-item {
+            background: linear-gradient(90deg, rgba(255,0,60,0.1) 0%, rgba(0,0,0,0) 100%);
+            border-left: 6px solid var(--cp-red);
+            padding: 30px;
+            position: relative;
+            transition: background 0.3s ease; /* Removed padding transition */
+        }
+
+        .event-item:hover {
+            background: linear-gradient(90deg, rgba(255,0,60,0.2) 0%, rgba(0,0,0,0) 100%);
+            /* padding-left: 40px; REMOVED */
+        }
+
+        .event-item::before {
+            content: 'WARNING // CLASSIFIED';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: var(--cp-font-mono);
+            font-size: 0.8rem;
+            color: var(--cp-red);
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        .event-year {
+            font-family: var(--cp-font-mono);
+            color: var(--cp-yellow);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .event-title {
+            font-size: 1.8rem;
+            margin: 5px 0 15px 0;
+            color: aquamarine; /* Match global */
+        }
+        
+        .event-desc {
+            color: aquamarine; /* Match global */
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #080808;
+            border-top: 6px solid var(--cp-red);
+            padding: 60px 40px;
+            text-align: center;
+            font-family: var(--cp-font-mono);
+            position: relative;
+        }
+
+        .netwatch-warning {
+            color: var(--cp-red);
+            border: 2px solid var(--cp-red);
+            padding: 15px 30px;
+            display: inline-block;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            background: rgba(255, 0, 60, 0.05);
+        }
+
+        .footer-links {
+            margin-bottom: 30px;
+        }
+
+        .footer-links a {
+            color: #666;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--cp-yellow);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .history-grid { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 20px; padding: 20px; }
+            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .section-title { font-size: 2.5rem; }
+            .history-img { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo highlight-hover">NIGHT CITY</div>
+        <nav>
+            <ul>
+                <li><a href="#history">История</a></li>
+                <li><a href="#legends">Легенды</a></li>
+                <li><a href="#events">События</a></li>
+                <li><a href="https://cyberpunk.fandom.com/ru/wiki/Night_City" target="_blank">Wiki</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>City of Dreams</h1>
+        <p>Доброе утро, Найт-Сити! Вчерашний подсчёт трупов закончился на крепкой тридцаточке! Спонсор десятки — нестихающие уличные войны в Хейвуде! Минус один коп, так что все готовьтесь!</p>
+        <div>
+            <a href="#history" class="cp-button">погнали, чумба!</a>
+        </div>
+    </section>
+
+    <section id="history">
+        <h2 class="section-title"><span>//</span> История</h2>
+        <div class="history-grid">
+            <div class="history-text">
+                <p>Найт-Сити был основан Ричардом Найтом в 1994 году как Коронадо-Сити. Найт мечтал создать идеальный город, свободный от коррупции старого мира и корпоративного влияния. Однако его мечта превратилась в поле битвы для мегакорпораций, которые увидели в новом городе идеальный плацдарм для своих операций вне юрисдикции национальных правительств.</p>
+                <p>После трагического убийства Ричарда Найта в 1998 году город был переименован в его честь. В последующие десятилетия Найт-Сити пережил власть мафии, жестокие корпоративные войны и даже ядерный взрыв в 2023 году, устроенный Джонни Сильверхендом в попытке уничтожить башню Арасака. Этот акт терроризма навсегда изменил облик города, превратив центр в радиоактивную пустошь на десятилетия.</p>
+                <p>К 2077 году Найт-Сити восстал из пепла, став независимым городом-государством на границе Северной и Южной Калифорнии. Это символ безудержного капитализма, где технологии переплетаются с нищетой, а жизнь человека стоит меньше, чем киберимплант в его голове. Город разделен на районы, каждый из которых контролируется различными бандами и корпорациями, создавая уникальную экосистему насилия и возможностей.</p>
+            </div>
+            <div class="history-img-container">
+                <img src="city1.jpg" class="history-img" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <section id="legends">
+        <h2 class="section-title"><span>//</span> Легенды Найт-Сити</h2>
+        <div class="legends-grid">
+            <div class="legend-card">
+                <img src="Johnny.jpg" alt="Johnny Silverhand" class="legend-img" loading="lazy">
+                <div class="legend-info">
+                    <div class="legend-name">Johnny Silverhand</div>
+                    <div class="legend-desc">Рокербой, фронтмен группы Samurai и анархист. Взорвал Арасака-Тауэр в 2023 году, став символом борьбы против корпораций. Его сознание было оцифровано с помощью Soulkiller.</div>
+                </div>
+            </div>
+            <div class="legend-card">
+                <img src="Morgan.jpg" alt="Morgan Blackhand" class="legend-img" loading="lazy">
+                <div class="legend-info">
+                    <div class="legend-name">Morgan Blackhand</div>
+                    <div class="legend-desc">Соло-наемник высшего класса, известный своим прагматизмом. В отличие от Сильверхенда, предпочитает выполнять работу чисто и без лишних жертв. Считается лучшим соло в истории.</div>
+                </div>
+            </div>
+            <div class="legend-card">
+                <img src="V.jpg" alt="V" class="legend-img" loading="lazy">
+                <div class="legend-info">
+                    <div class="legend-name">V</div>
+                    <div class="legend-desc">Наемник из "Посмертия", бросивший вызов самой смерти и корпорации Арасака. Носитель биочипа с энграммой Джонни Сильверхенда. Легенда, переписавшая правила игры.</div>
+                </div>
+            </div>
+            <div class="legend-card">
+                <img src="David.jpg" alt="David Martinez" class="legend-img" loading="lazy">
+                <div class="legend-info">
+                    <div class="legend-name">David Martinez</div>
+                    <div class="legend-desc">Уличный парень из Санто-Доминго, ставший легендой Эджраннеров. Владелец экспериментального Сандевистана, бросивший вызов Адаму Смэшеру ради мечты.</div>
+                </div>
+            </div>
+            <div class="legend-card">
+                <img src="smasher.jpg" alt="Adam Smasher" class="legend-img" loading="lazy">
+                <div class="legend-info">
+                    <div class="legend-name">Adam Smasher</div>
+                    <div class="legend-desc">Живое оружие Арасаки. Киборг, в котором почти не осталось человеческого. Убийца Джонни Сильверхенда и Дэвида Мартинеса. Кошмар любого эджраннера.</div>
+                </div>
+            </div>
+            <div class="legend-card">
+                <img src="Bestia.jpg" alt="Bestia" class="legend-img" loading="lazy">
+                <div class="legend-info">
+                    <div class="legend-name">Rogue</div>
+                    <div class="legend-desc">Бывшая наёмница-соло, лучший фиксер Найт-Сити, известная как «королева фиксеров», владелица клуба «Посмертие».</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="events">
+        <h2 class="section-title"><span>//</span> Хронология</h2>
+        <ul class="events-list">
+            <li class="event-item">
+                <div class="event-year">1994</div>
+                <div class="event-title">Основание города</div>
+                <p class="event-desc">Ричард Найт основывает Коронадо-Сити при поддержке корпораций Petrochem, Arasaka и EBM.</p>
+            </li>
+            <li class="event-item">
+                <div class="event-year">2023</div>
+                <div class="event-title">Ядерный терракт</div>
+                <p class="event-desc">Ядерный взрыв в штаб-квартире Арасаки, уничтоживший центр города. Погибло более полумиллиона человек. Конец Четвертой Корпоративной Войны.</p>
+            </li>
+            <li class="event-item">
+                <div class="event-year">2045</div>
+                <div class="event-title">Время Красного</div>
+                <p class="event-desc">Период восстановления. Небо окрашено в кроваво-красный цвет из-за атмосферных частиц после взрыва и пожаров.</p>
+            </li>
+            <li class="event-item">
+                <div class="event-year">2070</div>
+                <div class="event-title">Объединительная Война</div>
+                <p class="event-desc">Конфликт между НСША и Свободными Штатами. Найт-Сити сохранил независимость благодаря вмешательству Арасаки, вернувшейся в город.</p>
+            </li>
+            <li class="event-item">
+                <div class="event-year">2077</div>
+                <div class="event-title">Инцидент В Компэки-плаза</div>
+                <p class="event-desc">За несколько часов в Компэки-плаза произошло то, что навсегда изменило мир: Сабуро Арасака был убит своим собственным сыном, а Ви со своим лучшим другом Джеки украли биочип с энграммой(копией сознания) Джонни Сильверхенда.</p>
+            </li>
+        </ul>
+    </section>
+
+    <footer>
+        <div class="netwatch-warning">
+            ВНИМАНИЕ: Соединение отслеживается NetWatch. Любая нелегальная активность будет пресечена протоколом "Черный Лед".
+        </div>
+        <div class="footer-links">
+            <a href="#">Корпоративные правила</a>
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Связаться с фиксером</a>
+            <a href="#">База данных NCPD</a>
+        </div>
+        <p style="margin-top: 20px; color: #444;">&copy; 2077 Night City Corp. All wrongs reserved. Powered by Arasaka & Militech.</p>
+    </footer>
+
+</body>
+</html>
