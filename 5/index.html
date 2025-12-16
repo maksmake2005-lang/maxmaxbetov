@@ -55,7 +55,7 @@
             font-size: 1.2rem;
             cursor: pointer;
             clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Removed transform */
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
             text-decoration: none;
             display: inline-block;
             position: relative;
@@ -116,7 +116,7 @@
 
         .hero {
             height: 85vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1605218427368-35b0f996d916?q=80&w=2070&auto=format&fit=crop');
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('City2.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -251,10 +251,6 @@
             border-bottom: 4px solid var(--cp-red);
         }
 
-        .legend-card:hover .legend-img {
-
-        }
-
         .legend-info {
             padding: 25px;
         }
@@ -274,7 +270,7 @@
             line-height: 1.6;
         }
 
- 
+
         .events-list {
             list-style: none;
             display: grid;
@@ -325,7 +321,6 @@
             color: aquamarine; 
             font-size: 1.1rem;
         }
-
    
         footer {
             background-color: #080808;
@@ -363,6 +358,51 @@
         .footer-links a:hover {
             color: var(--cp-yellow);
         }
+        .attractions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .attraction-card {
+            background-color: var(--cp-dark-grey);
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .attraction-card:hover {
+            border-color: var(--cp-yellow);
+            box-shadow: 0 10px 30px rgba(252, 238, 10, 0.1);
+        }
+
+        .attraction-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 4px solid var(--cp-yellow);
+        }
+
+        .attraction-info {
+            padding: 25px;
+        }
+
+        .attraction-name {
+            font-size: 1.8rem;
+            color: var(--cp-yellow);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .attraction-desc {
+            font-family: var(--cp-font-mono);
+            font-size: 1rem;
+            color: aquamarine;
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 3.5rem; }
             .history-grid { grid-template-columns: 1fr; }
@@ -382,7 +422,8 @@
                 <li><a href="#history">История</a></li>
                 <li><a href="#legends">Легенды</a></li>
                 <li><a href="#events">События</a></li>
-                <li><a href="https://cyberpunk.fandom.com/ru/wiki/Night_City" target="_blank">Wiki</a></li>
+                <li><a href="#attractions">Места</a></li>
+                <li><a href="https://cyberpunk.fandom.com/ru/wiki/Night_City" target="_blank" rel="noopener noreferrer">Wiki</a></li>
             </ul>
         </nav>
     </header>
@@ -404,7 +445,7 @@
                 <p>К 2077 году Найт-Сити восстал из пепла, став независимым городом-государством на границе Северной и Южной Калифорнии. Это символ безудержного капитализма, где технологии переплетаются с нищетой, а жизнь человека стоит меньше, чем киберимплант в его голове. Город разделен на районы, каждый из которых контролируется различными бандами и корпорациями, создавая уникальную экосистему насилия и возможностей.</p>
             </div>
             <div class="history-img-container">
-                <img src="city1.jpg" class="history-img" loading="lazy">
+                <img src="city1.jpg" class="history-img" loading="lazy" alt="Night City History">
             </div>
         </div>
     </section>
@@ -466,6 +507,11 @@
                 <p class="event-desc">Ричард Найт основывает Коронадо-Сити при поддержке корпораций Petrochem, Arasaka и EBM.</p>
             </li>
             <li class="event-item">
+                <div class="event-year">1998</div>
+                <div class="event-title">Коронадо-Сити -> Найт-сити</div>
+                <p class="event-desc">Ричард Найт трагически погибает в возрасте 44 лет от падения со своих апартаментов в центре города. Корпорация "Найт", основанная им же, принимает на себя управление городом и переименовывает его в честь своего отца-основателя.</p>
+            </li>
+            <li class="event-item">
                 <div class="event-year">2023</div>
                 <div class="event-title">Ядерный терракт</div>
                 <p class="event-desc">Четвёртая корпоративная война, бушевавшая по всему миру, унесла бесчисленное множество жизней. И закончилась такая война - как и ожидалось - ядерным взрывом.
@@ -473,9 +519,9 @@
                 ядерной бомбы прямо в сердце города, уничтожив Арасака-тауэр и весь центр города.</p>
             </li>
             <li class="event-item">
-                <div class="event-year">2045</div>
-                <div class="event-title">Время восстановления</div>
-                <p class="event-desc">Несмотря на прошедшие годы, Найт-сити снова отстраивается. В основном ему с этим помогают кочевники - люди, что не имеют одного места жительства,
+                <div class="event-year">2023-2070</div>
+                <div class="event-title">Корпоративные войны</div>
+                <p class="event-desc">Несмотря на прошедшие годы и корпоративные войны, а также войны банд, Найт-сити раз за разом восстанавливается. В основном ему с этим помогают кочевники - люди, что не имеют одного места жительства,
                 и кочуют по пустошам огромными семьями. Главную роль в восстановлени сыграл клан Альдекальдо.</p>
             </li>
             <li class="event-item">
@@ -490,6 +536,33 @@
                 <p class="event-desc">За несколько часов в Компэки-плаза произошло то, что навсегда изменило мир: Сабуро Арасака был убит своим собственным сыном, а Ви со своим лучшим другом Джеки украли биочип с энграммой(копией сознания) Джонни Сильверхенда.</p>
             </li>
         </ul>
+    </section>
+
+    <section id="attractions">
+        <h2 class="section-title"><span>//</span> Достопримечательности</h2>
+        <div class="attractions-grid">
+            <div class="attraction-card">
+                <img src="sakura.jpg" alt="Рынок Цветок сакуры" class="attraction-img" loading="lazy">
+                <div class="attraction-info">
+                    <div class="attraction-name">Рынок «Цветок сакуры»</div>
+                    <div class="attraction-desc">Голографические вишни в цвету, гигантская статуя и изобильные прилавки. Островок Японии прямо в Найт-Сити.</div>
+                </div>
+            </div>
+            <div class="attraction-card">
+                <img src="center.jpg" alt="Роки-Ридж" class="attraction-img" loading="lazy">
+                <div class="attraction-info">
+                    <div class="attraction-name">Площадь корпораций</div>
+                    <div class="attraction-desc">Центральная часть Найт-Сити. Великолепный современный стиль и главные офисы всех ведущих корпораций планеты прямо перед, слева, справа и сзади от вас.</div>
+                </div>
+            </div>
+            <div class="attraction-card">
+                <img src="ReconciliationPark.jpg" alt="Парк Примирения" class="attraction-img" loading="lazy">
+                <div class="attraction-info">
+                    <div class="attraction-name">Парк Примирения</div>
+                    <div class="attraction-desc">Островок безмятежности в Хейвуде. Тишина, озеро и буйная растительность вдали от неона и вечно стремительной жизни города.</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <footer>
