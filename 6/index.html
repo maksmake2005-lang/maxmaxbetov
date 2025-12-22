@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Russian Space Tech 2025</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #050505;
+        color: #e0e0e0;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    h1, h2, h3 {
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .header-section {
+        background-color: #000000;
+        padding: 40px 20px;
+        text-align: center;
+        border-bottom: 4px solid #0066cc;
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+
+    .main-title {
+        color: #ffffff;
+        font-size: 3em;
+        text-shadow: 4px 4px 0px #d40000; 
+        margin: 0;
+    }
+
+    .subtitle {
+        color: #00ccff;
+        font-size: 1.2em;
+        margin-top: 10px;
+    }
+    .cards-section {
+        background-color: #111111;
+        padding: 60px 20px;
+        min-height: 100vh;
+    }
+
+    .section-title {
+        text-align: center;
+        color: #00ccff;
+        font-size: 2.5em;
+        margin-bottom: 40px;
+        text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .tech-card {
+        background-color: #0a0a0a;
+        border: 2px solid #0066cc;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tech-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(0, 102, 204, 0.3);
+        border-color: #ffffff;
+    }
+
+    .tech-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #d40000; 
+    }
+.card-image-wrapper {
+    width: 100%;
+    height: 200px;
+    background-color: #1a1a1a;
+    border: 1px solid #555;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+
+    .image-input-field {
+        background: #000;
+        border: 1px solid #0066cc;
+        color: #00ccff;
+        padding: 8px;
+        font-family: 'Courier New', monospace;
+        text-align: center;
+        width: 80%;
+    }
+
+    .image-label {
+        color: #777;
+        font-size: 0.8em;
+        margin-bottom: 5px;
+    }
+    .card-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-title {
+        color: #d40000;
+        font-size: 1.5em;
+        margin: 0 0 15px 0;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+    }
+
+    .card-description {
+        color: #cccccc;
+        line-height: 1.6;
+        font-size: 0.95em;
+    }
+    @media (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .main-title {
+            font-size: 2em;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .grid-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;      
+    object-position: center;
+    display: block;
+}
+    .footer-section {
+        background-color: #000000;
+        border-top: 4px solid #d40000;
+        padding: 40px 20px;
+        text-align: center;
+        margin-top: auto;
+    }
+    .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .footer-links {
+        margin: 20px 0;
+    }
+    .footer-link {
+        color: #00ccff;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 1.1em;
+        transition: color 0.3s;
+    }
+    .footer-link:hover {
+        color: #ffffff;
+        text-shadow: 0 0 10px #00ccff;
+    }
+    .copyright {
+        color: #777;
+        font-size: 0.9em;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+   
+    <section class="header-section">
+        <h1 class="main-title">Космос РФ 2025</h1>
+        <p class="subtitle">MODERN RUSSIAN SPACE TECHNOLOGIES</p>
+    </section>
+
+    
+    <section class="cards-section">
+        <h2 class="section-title">ПЕРСПЕКТИВНЫЕ РАЗРАБОТКИ</h2>
+        
+        <div class="grid-container">
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                 <img src="angara_a5.jpg" alt="Ангара-А5" class="card-image"> 
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">АНГАРА-А5</h3>
+                    <p class="card-description">
+                        Тяжелая ракета-носитель модульного типа. Использует кислородно/керосиновый двигатель РД-191. 
+                        Ключевой элемент независимого доступа России в космос с космодрома Восточный. 
+                        Способна поднимать от 3.5 до 38 тонн полезного груза на орбиту Земли.
+                        Главный разработчик -  Государственный космический научно-производственный центр имени М. В. Хруничева
+                    </p>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                   <img src="orel.jpg" alt="Орёл" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ОРЁЛ</h3>
+                    <p class="card-description">
+                        Многоразовый пилотируемый космический корабль нового поколения. 
+                        Предназначен для доставки людей и грузов на орбитальные станции и полетов к Луне.
+                        На данный момент находится в разработке и тестировании. Первый беспилотный полёт планируется
+                        к 2028 году, а первый полёт с пилотами - в 2030-ых.
+                    </p>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                    <img src="zeus.jpg" alt="СОВЕРШЕННО СЕКРЕТНО" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ЗЕВС (НУКЛОН)</h3>
+                    <p class="card-description">
+                        28 мая 2022 года Дмитрий Рогозин сказал, что "инвестиции даже в 1 триллион рублей
+                        (это примерно половина бюджета НАСА) позволили бы корпорации резко форсировать
+                        все её ключевые программы, включая и перспективную пилотируемую систему, и
+                        буксир «Зевс»". На данный момент первый запуск планируется в 2030 году.
+                    </p>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                    <img src="ross.jpg" alt="СОВЕРШЕННО СЕКРЕТНО" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">РОСС</h3>
+                    <p class="card-description">
+                        Планируемая российская орбитальная станция,
+                        которая должна прийти на смену постоянному участию 
+                        Российской Федерации в проекте МКС. Полное развёртывание станции планируется
+                        не позже 2034 года.
+                    </p>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                   <img src="glonass.jpg" alt="СОВЕРШЕННО СЕКРЕТНО" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ГЛОНАСС-К2</h3>
+                    <p class="card-description">
+                    Навигационные спутники нового поколения с увеличенным сроком службы. 
+                    Обеспечивают высокую точность позиционирования и новые типы сигналов.
+                    Являются неким аналогом "Starlink" от Илона Маска. 
+                    Совет от Др███████: уделить этой разработке приоритет на государственном
+                    уровне. Первый спутник был выведен на орбиту 7 июня 2023 года</p>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                     <img src="spectr.jpg" alt="СОВЕРШЕННО СЕКРЕТНО" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">СПЕКТР-УФ</h3>
+                    <p class="card-description">
+                         Космический телескоп, предназначенный для получения изображений и 
+                         спектроскопии в недоступном для наблюдений наземными инструментами участке 
+                         электромагнитного спектра — ультрафиолетовом (УФ, 100—320 нм).
+                         Имеет народное название "Русский Хаббл"
+                    </p>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                      <img src="luna27.jpg" alt="СОВЕРШЕННО СЕКРЕТНО" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">ЛУНА-27</h3>
+                    <p class="card-description">
+                        Тяжелый посадочный аппарат для извлечения с глубины и анализа образца лунного
+                        льда. Также, в рамках межагентского соглашения между Роскосмосом и Индийской 
+                        организацией космических исследований от 12 ноября 2007 года, в состав
+                        космического аппарата «Луна-27» включен индийский мини-луноход, но окончательно
+                        вопрос участия индийской стороны не решён. Запуск планируется примерно на 2029 год.
+                    </p>
+                </div>
+            </div>
+          
+            <div class="tech-card">
+                <div class="card-image-wrapper">
+                     <img src="marafon.jpg" alt="СОВЕРШЕННО СЕКРЕТНО" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">МАРАФОН-IOT</h3>
+                    <p class="card-description">
+                        "Ряд проектов, которые были в рамках предыдущей версии национального проекта,
+                        мы предлагаем бизнесу … Частники к указанным проектам пока интереса не проявили.
+                        Если проявят, для нас не будет проблемой вернуть". Сфера и ГЛОНАСС все еще 
+                        сохраняют свою актуальность.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer-section">
+        <div class="footer-content">
+            <h1>КОНТАКТНАЯ ИНФОРМАЦИЯ</h1>
+            <p>Адрес: г. Санкт-Петербург, ул. пушкина, д. Колотушкина, 67.</p>
+            <p>Телефон: +8 (800) 555-35-35</p>
+            <div class="footer-links">
+                <a href="https://www.roscosmos.ru/" target="_blank" class="footer-link">Роскосмос</a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="footer-link">Секретные архивы</a>
+            </div>
+            <p class="copyright">© 2025 Государственная корпорация по космической деятельности «Роскосмос». Возьмите меня на работу пж</p>
+        </div>
+    </footer>
+</body>
+</html>
