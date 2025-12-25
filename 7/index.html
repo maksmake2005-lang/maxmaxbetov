@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Functional Core</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palette: Obsidian & Violet */
+            --bg-body: #020617;       /* Very dark slate */
+            --bg-surface: #0f172a;    /* Dark slate */
+            --bg-surface-hover: #1e293b;
+            --bg-input: #020617;
+            
+            --border: #1e293b;
+            --border-active: #8b5cf6; /* Violet */
+            
+            --accent: #8b5cf6;        /* Violet 500 */
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            --accent-text: #a78bfa;   /* Violet 400 */
+            
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            
+            --success: #10b981;
+            --error: #ef4444;
+            
+            --radius: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 60px;
+            text-align: left;
+            border-left: 4px solid var(--accent);
+            padding-left: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--accent-text);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Accordion Styles */
+        .modules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .module-item {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .module-item:hover {
+            border-color: var(--border-active);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .module-header {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: transparent;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
+
+        .module-header:hover {
+            background-color: var(--bg-surface-hover);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .module-icon {
+            color: var(--accent);
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .module-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .toggle-icon {
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .module-item.active .toggle-icon {
+            transform: rotate(180deg);
+            color: var(--accent);
+        }
+
+        .module-item.active .module-header {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .module-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .module-content {
+            padding: 24px;
+        }
+
+        .module-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            max-width: 600px;
+        }
+
+        /* Controls */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .action-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Manrope', sans-serif;
+            height: 46px; /* Match input height */
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            background-color: #7c3aed; /* Slightly darker violet */
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Output */
+        .output-wrapper {
+            margin-top: 24px;
+            background-color: #000;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            position: relative;
+        }
+
+        .output-wrapper::before {
+            content: 'OUTPUT';
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background-color: var(--bg-body);
+            padding: 0 8px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .output-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        .output-value.success { color: var(--success); }
+        .output-value.error { color: var(--error); }
+
+        /* Image handling */
+        .module-img-container {
+            margin-bottom: 20px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            display: none; /* Hidden by default */
+        }
+        
+        .module-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            .controls-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>JS Functional Core</h1>
+            <p class="subtitle">SYSTEM_READY // WAITING_FOR_INPUT</p>
+        </header>
+
+        <div class="modules-list" id="accordion-container">
+            
+            <!-- 1. Sum Three -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">01</span>
+                        <span class="module-title">Сумма трех чисел</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="sum_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Sum">
+                        </div>
+                        <p class="module-desc">Функция принимает три числовых аргумента и возвращает их сумму. Поддерживает автоматическое приведение типов.</p>
+                        <div class="controls-grid">
+                            <div class="input-group">
+                                <label>Аргумент A</label>
+                                <input type="number" id="sum-a" placeholder="0">
+                            </div>
+                            <div class="input-group">
+                                <label>Аргумент B</label>
+                                <input type="number" id="sum-b" placeholder="0">
+                            </div>
+                            <div class="input-group">
+                                <label>Аргумент C</label>
+                                <input type="number" id="sum-c" placeholder="0">
+                            </div>
+                            <button class="action-btn" onclick="runSumThree()">Вычислить</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-sum">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Last Char -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">02</span>
+                        <span class="module-title">Последний символ</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="char_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Char">
+                        </div>
+                        <p class="module-desc">Возвращает последний символ переданной строки. Корректно обрабатывает пустые строки.</p>
+                        <div class="controls-grid">
+                            <div class="input-group" style="flex-grow: 2;">
+                                <label>Входная строка</label>
+                                <input type="text" id="char-str" placeholder="Введите текст...">
+                            </div>
+                            <button class="action-btn" onclick="runLastChar()">Получить</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-char">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Is True -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">03</span>
+                        <span class="module-title">Проверка True</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="bool_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Bool">
+                        </div>
+                        <p class="module-desc">Строгая проверка на булевое значение true. Исключает приведение типов (например, строка "true" вернет false).</p>
+                        <div class="controls-grid">
+                            <div class="input-group" style="flex-grow: 2;">
+                                <label>Значение</label>
+                                <select id="bool-val">
+                                    <option value="true_bool">Boolean: true</option>
+                                    <option value="false_bool">Boolean: false</option>
+                                    <option value="true_str">String: "true"</option>
+                                    <option value="1_num">Number: 1</option>
+                                    <option value="null_val">Null</option>
+                                </select>
+                            </div>
+                            <button class="action-btn" onclick="runIsTrue()">Проверить</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-bool">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Remove Key -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">04</span>
+                        <span class="module-title">Удаление ключа</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="obj_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Obj">
+                        </div>
+                        <p class="module-desc">Удаляет указанное свойство из объекта JSON. Возвращает модифицированный объект.</p>
+                        <div class="controls-grid">
+                            <div class="input-group" style="flex-grow: 2;">
+                                <label>JSON Объект</label>
+                                <textarea id="obj-json" rows="3">{"id": 101, "role": "admin", "active": true}</textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Ключ</label>
+                                <input type="text" id="obj-key" value="role">
+                            </div>
+                            <button class="action-btn" onclick="runRemoveKey()">Удалить</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-obj">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Add To End -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">05</span>
+                        <span class="module-title">Добавить в массив</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="arr_add_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Arr Add">
+                        </div>
+                        <p class="module-desc">Добавляет элемент в конец массива. Демонстрация работы с мутацией массивов.</p>
+                        <div class="controls-grid">
+                            <div class="input-group" style="flex-grow: 2;">
+                                <label>Массив (CSV)</label>
+                                <input type="text" id="arr-add-input" value="React, Vue">
+                            </div>
+                            <div class="input-group">
+                                <label>Элемент</label>
+                                <input type="text" id="arr-add-el" value="Svelte">
+                            </div>
+                            <button class="action-btn" onclick="runAddToEnd()">Добавить</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-arr-add">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. To Upper Case -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">06</span>
+                        <span class="module-title">Верхний регистр</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="arr_upper_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Upper">
+                        </div>
+                        <p class="module-desc">Преобразует массив строк в верхний регистр. Использует метод map для создания нового массива.</p>
+                        <div class="controls-grid">
+                            <div class="input-group" style="flex-grow: 2;">
+                                <label>Массив строк</label>
+                                <input type="text" id="arr-upper-input" value="alpha, beta, gamma">
+                            </div>
+                            <button class="action-btn" onclick="runToUpperCase()">Конвертировать</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-arr-upper">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Numbers To Strings -->
+            <div class="module-item">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <div class="header-content">
+                        <span class="module-icon">07</span>
+                        <span class="module-title">Числа в строки</span>
+                    </div>
+                    <svg class="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="module-body">
+                    <div class="module-content">
+                        <div class="module-img-container">
+                            <img src="arr_str_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Num Str">
+                        </div>
+                        <p class="module-desc">Преобразует массив чисел в строковый формат. Полезно для сериализации данных.</p>
+                        <div class="controls-grid">
+                            <div class="input-group" style="flex-grow: 2;">
+                                <label>Массив чисел</label>
+                                <input type="text" id="arr-num-input" value="1, 2, 4, 8, 16">
+                            </div>
+                            <button class="action-btn" onclick="runNumbersToStrings()">Преобразовать</button>
+                        </div>
+                        <div class="output-wrapper">
+                            <div class="output-value" id="out-arr-num">// Ожидание ввода...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>© 2025 JS Functional Core. Optimized for Performance.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- ACCORDION LOGIC ---
+        function toggleModule(header) {
+            const item = header.parentElement;
+            const body = item.querySelector('.module-body');
+            const isActive = item.classList.contains('active');
+
+            // Close all others (optional, for "effective" focus)
+            document.querySelectorAll('.module-item').forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.module-body').style.maxHeight = null;
+                }
+            });
+
+            // Toggle current
+            if (isActive) {
+                item.classList.remove('active');
+                body.style.maxHeight = null;
+            } else {
+                item.classList.add('active');
+                body.style.maxHeight = body.scrollHeight + "px";
+            }
+        }
+
+        // --- CORE LOGIC ---
+        const Core = {
+            sumThree: (a, b, c) => a + b + c,
+            lastChar: (str) => str.length > 0 ? str[str.length - 1] : '',
+            isTrue: (val) => val === true,
+            removeKey: (obj, key) => { const n = {...obj}; delete n[key]; return n; },
+            addToEnd: (arr, el) => [...arr, el],
+            toUpperCase: (arr) => arr.map(s => String(s).toUpperCase()),
+            numbersToStrings: (arr) => arr.map(n => String(n))
+        };
+
+        // --- UI HELPERS ---
+        function setOutput(id, text, type = 'normal') {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.className = 'output-value';
+            if (type === 'success') el.classList.add('success');
+            if (type === 'error') el.classList.add('error');
+        }
+
+        function parseArray(str) {
+            return str.split(',').map(s => s.trim()).filter(s => s !== '');
+        }
+
+        // --- HANDLERS ---
+        function runSumThree() {
+            const a = parseFloat(document.getElementById('sum-a').value) || 0;
+            const b = parseFloat(document.getElementById('sum-b').value) || 0;
+            const c = parseFloat(document.getElementById('sum-c').value) || 0;
+            setOutput('out-sum', Core.sumThree(a, b, c), 'success');
+        }
+
+        function runLastChar() {
+            const str = document.getElementById('char-str').value;
+            const res = Core.lastChar(str);
+            setOutput('out-char', res ? `"${res}"` : 'Пустая строка', res ? 'success' : 'normal');
+        }
+
+        function runIsTrue() {
+            const type = document.getElementById('bool-val').value;
+            let val;
+            switch(type) {
+                case 'true_bool': val = true; break;
+                case 'false_bool': val = false; break;
+                case 'true_str': val = "true"; break;
+                case '1_num': val = 1; break;
+                case 'null_val': val = null; break;
+            }
+            const res = Core.isTrue(val);
+            setOutput('out-bool', res.toString(), res ? 'success' : 'error');
+        }
+
+        function runRemoveKey() {
+            try {
+                const json = document.getElementById('obj-json').value;
+                const key = document.getElementById('obj-key').value;
+                const obj = JSON.parse(json);
+                const res = Core.removeKey(obj, key);
+                setOutput('out-obj', JSON.stringify(res, null, 2), 'success');
+            } catch (e) {
+                setOutput('out-obj', 'Ошибка: Некорректный JSON', 'error');
+            }
+        }
+
+        function runAddToEnd() {
+            const arr = parseArray(document.getElementById('arr-add-input').value);
+            const el = document.getElementById('arr-add-el').value;
+            setOutput('out-arr-add', JSON.stringify(Core.addToEnd(arr, el)), 'success');
+        }
+
+        function runToUpperCase() {
+            const arr = parseArray(document.getElementById('arr-upper-input').value);
+            setOutput('out-arr-upper', JSON.stringify(Core.toUpperCase(arr)), 'success');
+        }
+
+        function runNumbersToStrings() {
+            const arr = parseArray(document.getElementById('arr-num-input').value)
+                .map(n => parseFloat(n)).filter(n => !isNaN(n));
+            const res = Core.numbersToStrings(arr);
+            setOutput('out-arr-num', `[ ${res.map(s => `"${s}"`).join(', ')} ]`, 'success');
+        }
+    </script>
+</body>
+</html>
