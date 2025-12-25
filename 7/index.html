@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Matrix Palette */
             --bg-body: #000000;
             --bg-surface: rgba(0, 20, 0, 0.9);
             --bg-input: #000000;
@@ -43,8 +42,6 @@
             overflow-x: hidden;
             font-size: 1.2rem;
         }
-
-        /* Matrix Rain Canvas */
         #matrix-bg {
             position: fixed;
             top: 0;
@@ -54,8 +51,6 @@
             z-index: -1;
             opacity: 0.8;
         }
-
-        /* CRT Scanline Effect */
         .scanlines {
             position: fixed;
             top: 0;
@@ -107,11 +102,11 @@
             text-transform: uppercase;
         }
 
-        /* Accordion Styles */
+        /* АККОРДИОООООН */
         .modules-list {
             display: flex;
             flex-direction: column;
-            gap: 2px; /* Terminal lines look */
+            gap: 2px;
             border: 1px solid var(--matrix-dark);
             background: rgba(0,0,0,0.8);
         }
@@ -195,8 +190,6 @@
             margin-bottom: 20px;
             max-width: 100%;
         }
-
-        /* Controls */
         .controls-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -209,13 +202,11 @@
             flex-direction: column;
             gap: 4px;
         }
-
         label {
             font-size: 1rem;
             text-transform: uppercase;
             color: var(--matrix-dark);
         }
-
         input, select, textarea {
             background-color: var(--bg-input);
             border: 1px solid var(--matrix-dark);
@@ -226,13 +217,11 @@
             width: 100%;
             box-shadow: inset 0 0 5px rgba(0, 255, 65, 0.1);
         }
-
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--matrix-green);
             box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
         }
-
         .action-btn {
             background-color: #000;
             color: var(--matrix-green);
@@ -246,15 +235,12 @@
             height: 46px;
             letter-spacing: 2px;
         }
-
         .action-btn:hover {
             background-color: var(--matrix-green);
             color: #000;
             box-shadow: var(--glow);
             font-weight: bold;
         }
-
-        /* Output */
         .output-wrapper {
             margin-top: 20px;
             background-color: rgba(0, 20, 0, 0.8);
@@ -284,22 +270,6 @@
 
         .output-value.error { color: #ff0000; text-shadow: 0 0 5px red; }
 
-        /* Image handling */
-        .module-img-container {
-            margin-bottom: 20px;
-            border: 1px solid var(--matrix-dark);
-            display: none;
-            filter: sepia(100%) hue-rotate(50deg) saturate(500%) contrast(1.2);
-            opacity: 0.8;
-        }
-        
-        .module-img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            display: block;
-        }
-
         footer {
             text-align: center;
             padding: 40px;
@@ -309,7 +279,6 @@
             text-transform: uppercase;
         }
 
-        /* Glitch Animation for Title */
         @keyframes glitch {
             0% { transform: translate(0) }
             20% { transform: translate(-2px, 2px) }
@@ -329,21 +298,18 @@
     </style>
 </head>
 <body>
-
     <canvas id="matrix-bg"></canvas>
     <div class="scanlines"></div>
 
     <div class="container">
         <header>
-            <h1>THE MATRIX</h1>
-            <p class="subtitle">SYSTEM_ROOT // FUNCTIONAL_CONSTRUCT</p>
+            <h1>JAVA SCRIPT | MAXIMUS DEVELOPMENT</h1>
+            <p class="subtitle">РЕАЛИЗАЦИЯ НЕКОТОРЫХ ФУНКЦИЙ JAVA SCRIPT</p>
         </header>
 
         <div class="modules-list" id="accordion-container">
-            
-            <!-- 1. Sum Three -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[01]</span>
                         <span class="module-title">SUM_THREE_INTEGERS</span>
@@ -352,9 +318,6 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="sum_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Sum">
-                        </div>
                         <p class="module-desc">> Инициализация алгоритма сложения трех переменных. Ожидание ввода данных...</p>
                         <div class="controls-grid">
                             <div class="input-group">
@@ -369,7 +332,7 @@
                                 <label>INPUT_C</label>
                                 <input type="number" id="sum-c" placeholder="0">
                             </div>
-                            <button class="action-btn" onclick="runSumThree()">EXECUTE</button>
+                            <button class="action-btn" id="btn-sum">EXECUTE</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-sum">_</div>
@@ -377,10 +340,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 2. Last Char -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[02]</span>
                         <span class="module-title">EXTRACT_LAST_CHAR</span>
@@ -389,16 +350,13 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="char_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Char">
-                        </div>
                         <p class="module-desc">> Анализ строкового буфера. Извлечение терминального символа.</p>
                         <div class="controls-grid">
                             <div class="input-group" style="flex-grow: 2;">
                                 <label>STRING_BUFFER</label>
                                 <input type="text" id="char-str" placeholder="Enter data stream...">
                             </div>
-                            <button class="action-btn" onclick="runLastChar()">EXTRACT</button>
+                            <button class="action-btn" id="btn-char">EXTRACT</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-char">_</div>
@@ -406,10 +364,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 3. Is True -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[03]</span>
                         <span class="module-title">BOOLEAN_VERIFICATION</span>
@@ -418,9 +374,6 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="bool_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Bool">
-                        </div>
                         <p class="module-desc">> Проверка истинности. Исключение ложных сигналов и симуляций.</p>
                         <div class="controls-grid">
                             <div class="input-group" style="flex-grow: 2;">
@@ -433,7 +386,7 @@
                                     <option value="null_val">NULL</option>
                                 </select>
                             </div>
-                            <button class="action-btn" onclick="runIsTrue()">VERIFY</button>
+                            <button class="action-btn" id="btn-bool">VERIFY</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-bool">_</div>
@@ -441,10 +394,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 4. Remove Key -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[04]</span>
                         <span class="module-title">OBJECT_KEY_PURGE</span>
@@ -453,20 +404,17 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="obj_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Obj">
-                        </div>
                         <p class="module-desc">> Удаление уязвимостей из структуры объекта. Очистка памяти.</p>
                         <div class="controls-grid">
                             <div class="input-group" style="flex-grow: 2;">
                                 <label>JSON_DATA</label>
-                                <textarea id="obj-json" rows="3">{"id": 101, "agent": "Smith", "status": "rogue"}</textarea>
+                                <textarea id="obj-json" rows="3">{"id": "101", "agent": "Smith", "status": "rogue"}</textarea>
                             </div>
                             <div class="input-group">
                                 <label>TARGET_KEY</label>
                                 <input type="text" id="obj-key" value="status">
                             </div>
-                            <button class="action-btn" onclick="runRemoveKey()">PURGE</button>
+                            <button class="action-btn" id="btn-obj">PURGE</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-obj">_</div>
@@ -474,10 +422,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 5. Add To End -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[05]</span>
                         <span class="module-title">ARRAY_INJECTION</span>
@@ -486,9 +432,6 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="arr_add_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Arr Add">
-                        </div>
                         <p class="module-desc">> Внедрение кода в конец последовательности данных.</p>
                         <div class="controls-grid">
                             <div class="input-group" style="flex-grow: 2;">
@@ -499,7 +442,7 @@
                                 <label>PAYLOAD</label>
                                 <input type="text" id="arr-add-el" value="Trinity">
                             </div>
-                            <button class="action-btn" onclick="runAddToEnd()">INJECT</button>
+                            <button class="action-btn" id="btn-arr-add">INJECT</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-arr-add">_</div>
@@ -507,10 +450,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 6. To Upper Case -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[06]</span>
                         <span class="module-title">UPPERCASE_CONVERSION</span>
@@ -519,16 +460,13 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="arr_upper_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Upper">
-                        </div>
                         <p class="module-desc">> Нормализация текстовых потоков. Приведение к верхнему регистру.</p>
                         <div class="controls-grid">
                             <div class="input-group" style="flex-grow: 2;">
                                 <label>TEXT_STREAM</label>
                                 <input type="text" id="arr-upper-input" value="wake up, neo">
                             </div>
-                            <button class="action-btn" onclick="runToUpperCase()">CONVERT</button>
+                            <button class="action-btn" id="btn-arr-upper">CONVERT</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-arr-upper">_</div>
@@ -536,10 +474,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 7. Numbers To Strings -->
             <div class="module-item">
-                <div class="module-header" onclick="toggleModule(this)">
+                <div class="module-header">
                     <div class="header-content">
                         <span class="module-icon">[07]</span>
                         <span class="module-title">NUM_TO_STRING_TRANSFORM</span>
@@ -548,16 +484,13 @@
                 </div>
                 <div class="module-body">
                     <div class="module-content">
-                        <div class="module-img-container">
-                            <img src="arr_str_module.jpg" class="module-img" onload="this.parentNode.style.display='block'" alt="Num Str">
-                        </div>
                         <p class="module-desc">> Трансформация числовых значений в строковые литералы.</p>
                         <div class="controls-grid">
                             <div class="input-group" style="flex-grow: 2;">
                                 <label>NUMERIC_STREAM</label>
                                 <input type="text" id="arr-num-input" value="1, 0, 1, 1, 0">
                             </div>
-                            <button class="action-btn" onclick="runNumbersToStrings()">TRANSFORM</button>
+                            <button class="action-btn" id="btn-arr-num">TRANSFORM</button>
                         </div>
                         <div class="output-wrapper">
                             <div class="output-value" id="out-arr-num">_</div>
@@ -569,165 +502,182 @@
         </div>
 
         <footer>
-            <p>MATRIX CONSTRUCT v2.5 // SYSTEM SECURE</p>
+            <p>MAXIMUS JS PAGE | Я ХОЧУ СДЕЛАТЬ МОД НА МАЙНКРАФТ</p>
         </footer>
     </div>
-
     <script>
-        // --- MATRIX RAIN EFFECT ---
-        const canvas = document.getElementById('matrix-bg');
-        const ctx = canvas.getContext('2d');
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- эффект дождя матрицы ---
+            const canvas = document.getElementById('matrix-bg');
+            const ctx = canvas.getContext('2d');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+            const fontSize = 16;
+            let columns = 0;
+            let rainDrops = [];
 
-        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        const alphabet = katakana + latin + nums;
-
-        const fontSize = 16;
-        const columns = canvas.width/fontSize;
-
-        const rainDrops = [];
-        for( let x = 0; x < columns; x++ ) {
-            rainDrops[x] = 1;
-        }
-
-        const draw = () => {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#0F0';
-            ctx.font = fontSize + 'px monospace';
-
-            for(let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i*fontSize, rainDrops[i]*fontSize);
-
-                if(rainDrops[i]*fontSize > canvas.height && Math.random() > 0.975){
-                    rainDrops[i] = 0;
+            const initRain = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                columns = Math.floor(canvas.width / fontSize);
+                const newDrops = [];
+                for (let x = 0; x < columns; x++) {  
+                    newDrops[x] = (rainDrops[x] !== undefined) ? rainDrops[x] : Math.floor(Math.random() * 100) - 100; 
                 }
-                rainDrops[i]++;
-            }
-        };
+                rainDrops = newDrops;
+            };
+            initRain();
+            window.addEventListener('resize', initRain);
 
-        setInterval(draw, 30);
+            const katakana = 'トノホモヨロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const alphabet = katakana + latin + nums;
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // --- ACCORDION LOGIC ---
-        function toggleModule(header) {
-            const item = header.parentElement;
-            const body = item.querySelector('.module-body');
-            const toggle = item.querySelector('.toggle-icon');
-            const isActive = item.classList.contains('active');
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
 
-            // Close all others
-            document.querySelectorAll('.module-item').forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
-                    otherItem.querySelector('.module-body').style.maxHeight = null;
-                    otherItem.querySelector('.toggle-icon').textContent = '+';
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
                 }
+            };
+
+            setInterval(draw, 30);
+
+
+            // --- АККОРДИОН Я УЭЭЭ ---
+            const headers = document.querySelectorAll('.module-header');
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    const item = header.parentElement;
+                    const body = item.querySelector('.module-body');
+                    const toggle = item.querySelector('.toggle-icon');
+                    const isActive = item.classList.contains('active');
+                    document.querySelectorAll('.module-item').forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.module-body').style.maxHeight = null;
+                            otherItem.querySelector('.toggle-icon').textContent = '+';
+                        }
+                    });
+                    if (isActive) {
+                        item.classList.remove('active');
+                        body.style.maxHeight = null;
+                        toggle.textContent = '+';
+                    } else {
+                        item.classList.add('active');
+                        body.style.maxHeight = body.scrollHeight + "px";
+                        toggle.textContent = '-';
+                    }
+                });
             });
 
-            // Toggle current
-            if (isActive) {
-                item.classList.remove('active');
-                body.style.maxHeight = null;
-                toggle.textContent = '+';
-            } else {
-                item.classList.add('active');
-                body.style.maxHeight = body.scrollHeight + "px";
-                toggle.textContent = '-';
-            }
-        }
+            const sumThree = (a, b, c) => a + b + c;
 
-        // --- CORE LOGIC ---
-        const Core = {
-            sumThree: (a, b, c) => a + b + c,
-            lastChar: (str) => str.length > 0 ? str[str.length - 1] : '',
-            isTrue: (val) => val === true,
-            removeKey: (obj, key) => { const n = {...obj}; delete n[key]; return n; },
-            addToEnd: (arr, el) => [...arr, el],
-            toUpperCase: (arr) => arr.map(s => String(s).toUpperCase()),
-            numbersToStrings: (arr) => arr.map(n => String(n))
-        };
+            const lastChar = (str) => str.length > 0 ? str[str.length - 1] : '';
 
-        // --- UI HELPERS ---
-        function setOutput(id, text, type = 'normal') {
-            const el = document.getElementById(id);
-            el.textContent = "> " + text;
-            el.className = 'output-value';
-            if (type === 'success') el.classList.add('success');
-            if (type === 'error') el.classList.add('error');
-        }
+            const isTrue = (val) => val === true;
 
-        function parseArray(str) {
-            return str.split(',').map(s => s.trim()).filter(s => s !== '');
-        }
+            const removeKey = (obj, key) => {
+                const copy = { ...obj };
+                delete copy[key];
+                return copy;
+            };
 
-        // --- HANDLERS ---
-        function runSumThree() {
-            const a = parseFloat(document.getElementById('sum-a').value) || 0;
-            const b = parseFloat(document.getElementById('sum-b').value) || 0;
-            const c = parseFloat(document.getElementById('sum-c').value) || 0;
-            setOutput('out-sum', Core.sumThree(a, b, c), 'success');
-        }
+            const addToEnd = (arr, el) => [...arr, el];
 
-        function runLastChar() {
-            const str = document.getElementById('char-str').value;
-            const res = Core.lastChar(str);
-            setOutput('out-char', res ? `"${res}"` : 'NULL', res ? 'success' : 'normal');
-        }
+            const toUpperCase = (arr) => arr.map(s => String(s).toUpperCase());
 
-        function runIsTrue() {
-            const type = document.getElementById('bool-val').value;
-            let val;
-            switch(type) {
-                case 'true_bool': val = true; break;
-                case 'false_bool': val = false; break;
-                case 'true_str': val = "true"; break;
-                case '1_num': val = 1; break;
-                case 'null_val': val = null; break;
-            }
-            const res = Core.isTrue(val);
-            setOutput('out-bool', res.toString().toUpperCase(), res ? 'success' : 'error');
-        }
+            const numbersToStrings = (arr) => arr.map(String);
 
-        function runRemoveKey() {
-            try {
-                const json = document.getElementById('obj-json').value;
-                const key = document.getElementById('obj-key').value;
-                const obj = JSON.parse(json);
-                const res = Core.removeKey(obj, key);
-                setOutput('out-obj', JSON.stringify(res, null, 2), 'success');
-            } catch (e) {
-                setOutput('out-obj', 'ERROR: INVALID_JSON', 'error');
-            }
-        }
+            const setOutput = (id, text, type = 'normal') => {
+                const el = document.getElementById(id);
+                el.textContent = `> ${text}`;
+                el.className = 'output-value';
+                if (type === 'success') el.classList.add('success');
+                if (type === 'error') el.classList.add('error');
+            };
 
-        function runAddToEnd() {
+            const parseArray = (str) => str.split(',').map(s => s.trim()).filter(s => s !== '');
+            document.getElementById('btn-sum').addEventListener('click', () => {
+                const a = parseFloat(document.getElementById('sum-a').value) || 0;
+                const b = parseFloat(document.getElementById('sum-b').value) || 0;
+                const c = parseFloat(document.getElementById('sum-c').value) || 0;
+                setOutput('out-sum', sumThree(a, b, c), 'success');
+            });
+
+            document.getElementById('btn-char').addEventListener('click', () => {
+                const str = document.getElementById('char-str').value;
+                const res = lastChar(str);
+                setOutput('out-char', res ? `"${res}"` : 'NULL', res ? 'success' : 'normal');
+            });
+
+            document.getElementById('btn-bool').addEventListener('click', () => {
+                const type = document.getElementById('bool-val').value;
+                let val;
+                const map = {
+                    'true_bool': true,
+                    'false_bool': false,
+                    'true_str': "true",
+                    '1_num': 1,
+                    'null_val': null
+                };
+                val = map[type];
+                
+                const res = isTrue(val);
+                setOutput('out-bool', res.toString().toUpperCase(), res ? 'success' : 'error');
+            });
+
+document.getElementById('btn-obj').addEventListener('click', () => {
+    try {
+        const json = document.getElementById('obj-json').value;
+        let key = document.getElementById('obj-key').value.trim();
+        
+        key = isNaN(key) ? key : Number(key);
+        
+        const obj = JSON.parse(json);
+        const res = removeKey(obj, key);
+        setOutput('out-obj', JSON.stringify(res, null, 2), 'success');
+    } catch (e) {
+        setOutput('out-obj', `ERROR: ${e.message}`, 'error');
+    }
+});
+        document.getElementById('btn-arr-add').addEventListener('click', () => {
             const arr = parseArray(document.getElementById('arr-add-input').value);
             const el = document.getElementById('arr-add-el').value;
-            setOutput('out-arr-add', JSON.stringify(Core.addToEnd(arr, el)), 'success');
-        }
+            setOutput('out-arr-add', JSON.stringify(addToEnd(arr, el)), 'success');
+        });
 
-        function runToUpperCase() {
+        document.getElementById('btn-arr-upper').addEventListener('click', () => {
             const arr = parseArray(document.getElementById('arr-upper-input').value);
-            setOutput('out-arr-upper', JSON.stringify(Core.toUpperCase(arr)), 'success');
-        }
+            setOutput('out-arr-upper', JSON.stringify(toUpperCase(arr)), 'success');
+        });
 
-        function runNumbersToStrings() {
-            const arr = parseArray(document.getElementById('arr-num-input').value)
-                .map(n => parseFloat(n)).filter(n => !isNaN(n));
-            const res = Core.numbersToStrings(arr);
-            setOutput('out-arr-num', `[ ${res.map(s => `"${s}"`).join(', ')} ]`, 'success');
-        }
+        document.getElementById('btn-arr-num').addEventListener('click', () => {
+    const rawInput = document.getElementById('arr-num-input').value;
+    const parsed = parseArray(rawInput)
+        .map(n => parseFloat(n))
+        .filter(n => !isNaN(n));
+    const invalidCount = parseArray(rawInput).length - parsed.length;
+    const res = numbersToStrings(parsed);
+    const displayStr = `[ ${res.map(s => `"${s}"`).join(', ')} ]`;
+    let output = displayStr;
+    if (invalidCount > 0) {
+        output += `\n Некорректные данные (${invalidCount}) были проигнорированы`;
+    }
+    setOutput('out-arr-num', output, 'success');
+    });
+    });
     </script>
 </body>
 </html>
