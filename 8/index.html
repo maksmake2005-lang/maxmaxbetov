@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATRIX SYSTEM</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #000000;
+            --bg-surface: rgba(0, 20, 0, 0.9);
+            --bg-input: #000000;
+            
+            --matrix-green: #00ff41;
+            --matrix-dark: #008f11;
+            --matrix-pale: #e0ffe0;
+            
+            --border: #003b00;
+            --border-active: #00ff41;
+            
+            --glow: 0 0 10px rgba(0, 255, 65, 0.5);
+            --text-shadow: 0 0 5px rgba(0, 255, 65, 0.8);
+            
+            --font-main: 'VT323', monospace;
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--matrix-green);
+            line-height: 1.4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            font-size: 1.2rem;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            flex-grow: 1;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header & Nav */
+        header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--matrix-dark);
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            text-shadow: var(--text-shadow);
+            letter-spacing: 4px;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+
+        .subtitle {
+            color: var(--matrix-dark);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Navigation */
+        .nav-desktop {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-dark);
+            padding: 8px 16px;
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            border-color: var(--matrix-green);
+            color: var(--matrix-green);
+            box-shadow: var(--glow);
+            text-shadow: var(--text-shadow);
+        }
+
+        /* Burger Menu (UI) */
+        .burger-btn {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 10px;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 200;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 2px;
+            background-color: var(--matrix-green);
+            transition: var(--transition);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 150;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-nav-btn {
+            font-size: 2rem;
+            color: var(--matrix-green);
+            text-decoration: none;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+            padding: 10px 20px;
+            transition: var(--transition);
+        }
+
+        .mobile-nav-btn:hover {
+            border-color: var(--matrix-green);
+            box-shadow: var(--glow);
+        }
+
+        /* Main Content */
+        .content-section {
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid var(--matrix-dark);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none; /* Hidden by default, toggled via JS */
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            border-bottom: 1px dashed var(--matrix-dark);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--matrix-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .counter-display {
+            font-size: 1.2rem;
+            color: var(--matrix-dark);
+            border: 1px solid var(--matrix-dark);
+            padding: 5px 10px;
+        }
+
+        .counter-display.warning {
+            color: #ff0000;
+            border-color: #ff0000;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* To-Do Controls */
+        .todo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            background-color: var(--bg-input);
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            padding: 12px;
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+            flex-grow: 1;
+            box-shadow: inset 0 0 5px rgba(0, 255, 65, 0.1);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .action-btn {
+            background-color: #000;
+            color: var(--matrix-green);
+            border: 1px solid var(--matrix-green);
+            padding: 10px 24px;
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 2px;
+        }
+
+        .action-btn:hover {
+            background-color: var(--matrix-green);
+            color: #000;
+            box-shadow: var(--glow);
+            font-weight: bold;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-dark);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            border-color: var(--matrix-green);
+            color: var(--matrix-green);
+            box-shadow: var(--glow);
+        }
+
+        /* To-Do List */
+        .todo-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--matrix-dark);
+            background: rgba(0, 0, 0, 0.6);
+            transition: var(--transition);
+        }
+
+        .todo-item:hover {
+            border-color: var(--matrix-green);
+            box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
+        }
+
+        .todo-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--matrix-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .todo-text {
+            font-size: 1.3rem;
+            transition: var(--transition);
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--matrix-dark);
+        }
+
+        .todo-item.completed .checkbox::after {
+            content: 'X';
+            color: var(--matrix-green);
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-dark);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            transition: var(--transition);
+        }
+
+        .delete-btn:hover {
+            border-color: #ff0000;
+            color: #ff0000;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Burger Builder Styles */
+        .burger-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .ingredients-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ingredient-category h3 {
+            color: var(--matrix-dark);
+            border-bottom: 1px solid var(--matrix-dark);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .ingredient-btn {
+            background: rgba(0, 20, 0, 0.5);
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ingredient-btn:hover {
+            border-color: var(--matrix-green);
+            background: rgba(0, 50, 0, 0.5);
+        }
+
+        .ingredient-btn span {
+            font-size: 0.9rem;
+            color: var(--matrix-dark);
+        }
+
+        .preview-panel {
+            border: 1px solid var(--matrix-green);
+            padding: 20px;
+            background: rgba(0, 10, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .burger-visual {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 20px;
+            border: 1px dashed var(--matrix-dark);
+            margin-bottom: 20px;
+            min-height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        #burgerCanvas {
+            image-rendering: pixelated; /* Pixel art style */
+            max-width: 100%;
+            max-height: 100%;
+            filter: drop-shadow(0 0 5px rgba(0, 255, 65, 0.3));
+        }
+
+        .burger-receipt {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border-top: 1px solid var(--matrix-dark);
+            padding-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 5px;
+            cursor: pointer;
+            color: var(--matrix-dark);
+        }
+
+        .receipt-item:hover {
+            color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .order-summary {
+            border-top: 1px solid var(--matrix-dark);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--matrix-dark);
+            font-size: 1rem;
+            margin-top: auto;
+            text-transform: uppercase;
+            border-top: 1px solid var(--matrix-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-desktop { display: none; }
+            .burger-btn { display: flex; }
+            h1 { font-size: 2rem; }
+            .todo-controls { flex-direction: column; }
+            .action-btn { width: 100%; }
+            .burger-builder { grid-template-columns: 1fr; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        h1:hover {
+            animation: glitch 0.2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <header>
+            <div class="brand">
+                <h1>MATRIX SYSTEM</h1>
+                <p class="subtitle">МУЛЬТИ-МОДУЛЬНЫЙ ИНТЕРФЕЙС</p>
+            </div>
+            
+            <!-- Desktop Nav -->
+            <nav class="nav-desktop">
+                <button class="nav-btn active" onclick="switchView('todo')">МЕНЕДЖЕР ЗАДАЧ</button>
+                <button class="nav-btn" onclick="switchView('burger')">КОНСТРУКТОР БУРГЕРА</button>
+            </nav>
+
+            <!-- Mobile Burger Button (UI) -->
+            <button class="burger-btn" onclick="toggleMobileMenu()">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </button>
+        </header>
+
+        <!-- Mobile Menu Overlay -->
+        <nav id="mobile-menu" class="mobile-menu">
+            <a href="#" class="mobile-nav-btn" onclick="switchView('todo'); toggleMobileMenu()">МЕНЕДЖЕР ЗАДАЧ</a>
+            <a href="#" class="mobile-nav-btn" onclick="switchView('burger'); toggleMobileMenu()">КОНСТРУКТОР БУРГЕРА</a>
+            <button class="mobile-nav-btn" style="margin-top: 20px; border-color: #ff0000; color: #ff0000;" onclick="toggleMobileMenu()">ОТКЛЮЧИТЬСЯ</button>
+        </nav>
+
+        <!-- To-Do Section -->
+        <main id="view-todo" class="content-section active">
+            <h2 class="section-title">>> МОДУЛЬ: УПРАВЛЕНИЕ ЗАДАЧАМИ</h2>
+            
+            <div class="todo-controls">
+                <input type="text" id="taskInput" placeholder="ВВЕДИТЕ НОВУЮ ЗАДАЧУ...">
+                <button class="action-btn" id="addTaskBtn">ДОБАВИТЬ</button>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="setFilter('all')" id="filter-all">ВСЕ</button>
+                <button class="filter-btn" onclick="setFilter('active')" id="filter-active">АКТИВНЫЕ</button>
+                <button class="filter-btn" onclick="setFilter('completed')" id="filter-completed">ГОТОВЫЕ</button>
+            </div>
+
+            <ul id="taskList" class="todo-list">
+                <!-- Tasks injected here -->
+            </ul>
+        </main>
+
+        <!-- Burger Builder Section -->
+        <main id="view-burger" class="content-section">
+            <h2 class="section-title">
+                >> МОДУЛЬ: КОНСТРУКТОР ПИТАНИЯ
+                <div id="ingredientCounter" class="counter-display">ОСТАЛОСЬ СЛОТОВ: 15</div>
+            </h2>
+            
+            <div class="burger-builder">
+                <!-- Ingredients Selection -->
+                <div class="ingredients-panel">
+                    <div class="ingredient-category">
+                        <h3>[01] ОСНОВА</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addIngredient('Бриошь', 2)">
+                                Бриошь
+                                <span>2.00 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Булка с кунжутом', 1.5)">
+                                Кунжут
+                                <span>1.50 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Лист салата', 1)">
+                                Лист салата
+                                <span>1.00 CR</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ingredient-category">
+                        <h3>[02] НАЧИНКА</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addIngredient('Говядина', 5)">
+                                ГОВЯДИНА
+                                <span>5.00 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Курица', 4)">
+                                КУРИЦА
+                                <span>4.00 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Растит. мясо', 6)">
+                                Растит. мясо
+                                <span>6.00 CR</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ingredient-category">
+                        <h3>[03] ДОБАВКИ</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addIngredient('Сыр', 1)">
+                                СЫР
+                                <span>1.00 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Матричный соус', 0.5)">
+                                Соус сырный
+                                <span>0.50 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Огурчики', 0.5)">
+                                Огурчики
+                                <span>0.50 CR</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ingredient-category">
+                        <h3>[04] УНИКАЛЬНЫЕ</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addIngredient('СУПЕРМЕГААНАНОУЛЬТРАГАЛАКТИЧЕСКИЙ ИМПОРТНЫЙ ПРЯМО ИЗ КУХНИ ДРЕЙДОНА СОУС (съев это, вы станете экзо-мехом)', 2000)">
+                                СУПЕРМЕГА СОУС
+                                <span>2000.00 CR</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addIngredient('Секретные архивы роскосмоса', 0.5)">
+                                Секретные архивы
+                                <span>0.50 CR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-panel">
+                    <div class="burger-visual" id="burgerVisual">
+                        <canvas id="burgerCanvas" width="160" height="240"></canvas>
+                        <div id="emptyState" style="color: var(--matrix-dark); position: absolute;">>> ОЖИДАНИЕ ДАННЫХ</div>
+                    </div>
+                    
+                    <div class="burger-receipt" id="burgerReceipt">
+                    </div>
+
+                    <div class="order-summary">
+                        <div>ИТОГО: <span id="totalPrice">0.00</span> CR</div>
+                        <button class="action-btn" onclick="submitOrder()">ЗАКАЗАТЬ</button>
+                    </div>
+                    <button class="delete-btn" style="margin-top: 10px; width: 100%;" onclick="resetBurger()">СБРОСИТЬ КОНСТРУКЦИЮ</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>MAXIMUS DEVELOPMENT | MATRIX SYSTEM | V2.0.0</p>
+        </footer>
+    </div>
+
+    <script>
+
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        const fontSize = 16;
+        let columns = 0;
+        let rainDrops = [];
+
+        const initRain = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            const newDrops = [];
+            for (let x = 0; x < columns; x++) {  
+                newDrops[x] = (rainDrops[x] !== undefined) ? rainDrops[x] : Math.floor(Math.random() * 100) - 100; 
+            }
+            rainDrops = newDrops;
+        };
+
+        const drawRain = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            const katakana = 'トノホモヨロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const alphabet = katakana + latin + nums;
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        // --- App Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Init Rain
+            initRain();
+            window.addEventListener('resize', initRain);
+            setInterval(drawRain, 30);
+
+            // --- To-Do Logic ---
+            let tasks = JSON.parse(localStorage.getItem('matrix_tasks')) || [];
+            let currentFilter = localStorage.getItem('matrix_filter') || 'all';
+            const taskInput = document.getElementById('taskInput');
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            const taskList = document.getElementById('taskList');
+
+            function saveState() {
+                localStorage.setItem('matrix_tasks', JSON.stringify(tasks));
+                localStorage.setItem('matrix_filter', currentFilter);
+            }
+
+            function renderTasks() {
+                taskList.innerHTML = '';
+                let filteredTasks = tasks;
+                if (currentFilter === 'active') filteredTasks = tasks.filter(t => !t.completed);
+                if (currentFilter === 'completed') filteredTasks = tasks.filter(t => t.completed);
+
+                filteredTasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.className = `todo-item ${task.completed ? 'completed' : ''}`;
+                    li.innerHTML = `
+                        <div class="todo-content" onclick="toggleTask(${task.id})">
+                            <div class="checkbox"></div>
+                            <span class="todo-text">${escapeHtml(task.text)}</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteTask(${task.id})">[УДАЛИТЬ]</button>
+                    `;
+                    taskList.appendChild(li);
+                });
+
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn.id === `filter-${currentFilter}`) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                });
+            }
+
+            function addTask() {
+                const text = taskInput.value.trim();
+                if (text) {
+                    tasks.push({ id: Date.now(), text: text, completed: false });
+                    saveState();
+                    renderTasks();
+                    taskInput.value = '';
+                }
+            }
+
+            // --- Burger Builder Logic ---
+            const MAX_INGREDIENTS = 15;
+            let burgerLayers = [];
+            let remainingIngredients = MAX_INGREDIENTS;
+
+            const burgerCanvas = document.getElementById('burgerCanvas');
+            const burgerCtx = burgerCanvas.getContext('2d');
+            const totalPriceEl = document.getElementById('totalPrice');
+            const emptyState = document.getElementById('emptyState');
+            const burgerReceipt = document.getElementById('burgerReceipt');
+            const ingredientCounterEl = document.getElementById('ingredientCounter');
+
+            // Ingredient Visual Properties
+            const ingredientProps = {
+                'Бриошь': { color: '#E6A15C', h: 25, w: 140 },
+                'Булка с кунжутом': { color: '#F4C430', h: 25, w: 140 },
+                'Лист салата': { color: '#4CAF50', h: 10, w: 150 },
+                'Говядина': { color: '#8B4513', h: 20, w: 130 },
+                'Курица': { color: '#FFDEAD', h: 20, w: 130 },
+                'Растит. мясо': { color: '#556B2F', h: 20, w: 130 },
+                'Сыр': { color: '#FDD835', h: 8, w: 135 }, // Fixed to Yellow
+                'Бекон': { color: '#B22222', h: 8, w: 125 },
+                'Матричный соус': { color: '#00FF41', h: 6, w: 120 },
+                'Огурчики': { color: '#006400', h: 8, w: 120 }
+            };
+
+            function updateCounter() {
+                ingredientCounterEl.textContent = `ОСТАЛОСЬ СЛОТОВ: ${remainingIngredients}`;
+                if (remainingIngredients === 0) {
+                    ingredientCounterEl.classList.add('warning');
+                    ingredientCounterEl.textContent = "МАКСИМАЛЬНОЕ КОЛИЧЕСТВО ИНГРЕДИЕНТОВ!";
+                } else {
+                    ingredientCounterEl.classList.remove('warning');
+                }
+            }
+
+            window.addIngredient = (name, price) => {
+                if (remainingIngredients <= 0) {
+                    alert('МАКСИМАЛЬНОЕ КОЛИЧЕСТВО ИНГРЕДИЕНТОВ!');
+                    return;
+                }
+                
+                // Link logic on click/add
+                if (name.includes('СУПЕРМЕГА')) {
+                    window.open('https://andreyuir.github.io/9.9/', '_blank');
+                }
+                if (name.includes('Секретные архивы')) {
+                    window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+                }
+
+                // Special handling for long names to map to visual props
+                let visualName = name;
+                if (name.includes('СУПЕРМЕГА')) visualName = 'Бекон'; // Re-use bacon visual
+                if (name.includes('Секретные архивы')) visualName = 'Огурчики'; // Re-use pickles visual
+
+                burgerLayers.push({ name, price, visualName, id: Date.now() });
+                remainingIngredients--;
+                updateCounter();
+                renderBurger();
+            };
+
+            window.removeLayer = (id) => {
+                burgerLayers = burgerLayers.filter(l => l.id !== id);
+                if (remainingIngredients < MAX_INGREDIENTS) {
+                    remainingIngredients++;
+                }
+                updateCounter();
+                renderBurger();
+            };
+
+            window.resetBurger = () => {
+                burgerLayers = [];
+                remainingIngredients = MAX_INGREDIENTS;
+                updateCounter();
+                renderBurger();
+            };
+
+            window.submitOrder = () => {
+                if (burgerLayers.length === 0) {
+                    alert('ОШИБКА: КОНСТРУКЦИЯ ПУСТА');
+                    return;
+                }
+
+                const total = burgerLayers.reduce((sum, l) => sum + l.price, 0).toFixed(2);
+                alert(`ЗАКАЗ СФОРМИРОВАН.\nИТОГО: ${total} CR\nИНИЦИАЛИЗАЦИЯ СБОРКИ...`);
+                resetBurger();
+            };
+
+            function drawBurger() {
+                // Clear canvas
+                burgerCtx.clearRect(0, 0, burgerCanvas.width, burgerCanvas.height);
+                
+                if (burgerLayers.length === 0) return;
+
+                let currentY = burgerCanvas.height - 20; // Start from bottom
+                
+                // Draw layers
+                burgerLayers.forEach(layer => {
+                    // Use visualName if available, else name
+                    const lookupName = layer.visualName || layer.name;
+                    const props = ingredientProps[lookupName] || { color: '#FFF', h: 10, w: 100 };
+                    const x = (burgerCanvas.width - props.w) / 2;
+                    
+                    // Draw shadow
+                    burgerCtx.fillStyle = 'rgba(0,0,0,0.5)';
+                    burgerCtx.fillRect(x + 2, currentY - props.h + 2, props.w, props.h);
+                    
+                    // Draw main block
+                    burgerCtx.fillStyle = props.color;
+                    burgerCtx.fillRect(x, currentY - props.h, props.w, props.h);
+                    
+                    // Pixel border effect
+                    burgerCtx.strokeStyle = 'rgba(0,0,0,0.3)';
+                    burgerCtx.lineWidth = 1;
+                    burgerCtx.strokeRect(x, currentY - props.h, props.w, props.h);
+
+                    // Special details
+                    if (layer.name === 'Булка с кунжутом') {
+                        burgerCtx.fillStyle = '#FFF8DC';
+                        for(let i=0; i<5; i++) {
+                            burgerCtx.fillRect(x + 20 + i*20, currentY - props.h + 5, 2, 2);
+                        }
+                    }
+
+                    currentY -= props.h;
+                });
+            }
+
+            function renderBurger() {
+                // Toggle empty state
+                if (burgerLayers.length === 0) {
+                    emptyState.style.display = 'block';
+                    burgerCtx.clearRect(0, 0, burgerCanvas.width, burgerCanvas.height);
+                } else {
+                    emptyState.style.display = 'none';
+                    drawBurger();
+                }
+
+                // Update Receipt List
+                burgerReceipt.innerHTML = '';
+                let total = 0;
+                
+                // Show list in reverse order (top item first in list)
+                [...burgerLayers].reverse().forEach(layer => {
+                    total += layer.price;
+                    const div = document.createElement('div');
+                    div.className = 'receipt-item';
+                    // Truncate long names for receipt
+                    let displayName = layer.name;
+                    if (displayName.length > 20) displayName = displayName.substring(0, 18) + '...';
+                    
+                    div.innerHTML = `<span>${displayName}</span> <span>${layer.price}</span>`;
+                    div.onclick = () => window.removeLayer(layer.id);
+                    div.title = 'НАЖМИТЕ ЧТОБЫ УДАЛИТЬ';
+                    burgerReceipt.appendChild(div);
+                });
+
+                totalPriceEl.textContent = total.toFixed(2);
+            }
+
+            // --- Global Handlers ---
+            window.toggleTask = (id) => {
+                const task = tasks.find(t => t.id === id);
+                if (task) { task.completed = !task.completed; saveState(); renderTasks(); }
+            };
+
+            window.deleteTask = (id) => {
+                tasks = tasks.filter(t => t.id !== id);
+                saveState();
+                renderTasks();
+            };
+
+            window.setFilter = (filter) => {
+                currentFilter = filter;
+                saveState();
+                renderTasks();
+            };
+
+            window.switchView = (viewId) => {
+                document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+                document.getElementById(`view-${viewId}`).classList.add('active');
+                
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                const navBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(viewId));
+                if (navBtn) navBtn.classList.add('active');
+            };
+
+            window.toggleMobileMenu = () => {
+                document.getElementById('mobile-menu').classList.toggle('open');
+            };
+
+            addTaskBtn.addEventListener('click', addTask);
+            taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Initial Render
+            renderTasks();
+            renderBurger();
+            updateCounter();
+        });
+    </script>
+</body>
+</html>
