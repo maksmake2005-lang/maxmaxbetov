@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВКУСНО И ТОЧКА | MATRIX TERMINAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #000000;
+            --bg-surface: rgba(0, 10, 0, 0.9);
+            --bg-panel: rgba(0, 20, 0, 0.8);
+            
+            --matrix-green: #00ff41;
+            --matrix-dark: #008f11;
+            --matrix-pale: #e0ffe0;
+            --matrix-alert: #ff0000;
+            
+            --border: #003b00;
+            --glow: 0 0 10px rgba(0, 255, 65, 0.5);
+            --text-shadow: 0 0 5px rgba(0, 255, 65, 0.8);
+            
+            --font-main: 'VT323', monospace;
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--matrix-green);
+            line-height: 1.4;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 1.2rem;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.6;
+        }
+
+        .crt-flicker {
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 1; }
+            100% { opacity: 0.98; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .view {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        .view.active {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #view-welcome {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .welcome-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: var(--text-shadow);
+            border: 2px solid var(--matrix-green);
+            padding: 20px 40px;
+            box-shadow: var(--glow);
+            background: rgba(0, 20, 0, 0.8);
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            color: var(--matrix-pale);
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .btn-large {
+            font-family: var(--font-main);
+            font-size: 2rem;
+            background: transparent;
+            color: var(--matrix-green);
+            border: 2px solid var(--matrix-green);
+            padding: 15px 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        .btn-large:hover {
+            background: var(--matrix-green);
+            color: #000;
+            box-shadow: 0 0 20px var(--matrix-green);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--matrix-dark);
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            font-size: 2rem;
+            text-shadow: var(--text-shadow);
+        }
+
+        .terminal-info {
+            font-size: 1rem;
+            color: var(--matrix-dark);
+            text-align: right;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            flex-grow: 1;
+            overflow: hidden; 
+            min-height: 0; 
+        }
+
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-dark);
+            padding: 10px 20px;
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            flex-grow: 1;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            border-color: var(--matrix-green);
+            color: var(--matrix-green);
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: var(--glow);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            overflow-y: auto;
+            padding-right: 10px;
+            padding-bottom: 10px;
+        }
+
+        .products-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        .products-grid::-webkit-scrollbar-track {
+            background: #000;
+        }
+        .products-grid::-webkit-scrollbar-thumb {
+            background: var(--matrix-dark);
+        }
+
+        .product-card {
+            border: 1px solid var(--matrix-dark);
+            background: var(--bg-panel);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .product-card:hover {
+            border-color: var(--matrix-green);
+            box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--matrix-pale);
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--matrix-green);
+            text-align: right;
+        }
+
+        .add-btn {
+            background: var(--matrix-dark);
+            color: #000;
+            border: none;
+            padding: 5px;
+            font-family: var(--font-main);
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        .product-card:hover .add-btn {
+            background: var(--matrix-green);
+        }
+
+        .product-card.special {
+            border: 1px dashed var(--matrix-green);
+            background: rgba(0, 50, 0, 0.3);
+        }
+        .product-card.special .product-name {
+            color: var(--matrix-green);
+            text-align: center;
+        }
+
+        .cart-section {
+            border: 1px solid var(--matrix-green);
+            background: var(--bg-panel);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: var(--glow);
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .cart-title {
+            font-size: 1.5rem;
+            border-bottom: 1px dashed var(--matrix-dark);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+
+        .cart-items::-webkit-scrollbar {
+            width: 6px;
+        }
+        .cart-items::-webkit-scrollbar-thumb {
+            background: var(--matrix-dark);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 2px solid var(--matrix-dark);
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-item-name {
+            font-size: 1.1rem;
+        }
+
+        .cart-item-price {
+            font-size: 0.9rem;
+            color: var(--matrix-dark);
+        }
+
+        .cart-item-remove {
+            color: var(--matrix-alert);
+            cursor: pointer;
+            padding: 0 10px;
+            font-weight: bold;
+        }
+
+        .cart-item-remove:hover {
+            text-shadow: 0 0 5px red;
+        }
+
+        .cart-total {
+            border-top: 1px solid var(--matrix-green);
+            padding-top: 15px;
+            margin-top: auto;
+            flex-shrink: 0;
+            background: var(--bg-panel);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 15px;
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            background: var(--matrix-green);
+            color: #000;
+            box-shadow: var(--glow);
+        }
+
+        .checkout-btn:disabled {
+            border-color: var(--matrix-dark);
+            color: var(--matrix-dark);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex-grow: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .ingredients-panel {
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ingredient-category h3 {
+            color: var(--matrix-dark);
+            border-bottom: 1px solid var(--matrix-dark);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .ingredient-btn {
+            background: rgba(0, 20, 0, 0.5);
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ingredient-btn:hover {
+            border-color: var(--matrix-green);
+            background: rgba(0, 50, 0, 0.5);
+        }
+
+        .ingredient-btn span {
+            font-size: 0.9rem;
+            color: var(--matrix-dark);
+        }
+
+        .preview-panel {
+            border: 1px solid var(--matrix-green);
+            padding: 20px;
+            background: rgba(0, 10, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .burger-visual {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 20px;
+            border: 1px dashed var(--matrix-dark);
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+            min-height: 200px;
+        }
+
+        #burgerCanvas {
+            image-rendering: pixelated;
+            max-width: 100%;
+            max-height: 100%;
+            filter: drop-shadow(0 0 5px rgba(0, 255, 65, 0.3));
+        }
+
+        .builder-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .builder-total {
+            font-size: 1.5rem;
+            text-align: right;
+            margin-bottom: 10px;
+            color: var(--matrix-green);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #000;
+            border: 2px solid var(--matrix-green);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--matrix-pale);
+        }
+
+        .modal-text {
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+
+        .order-number {
+            font-size: 3rem;
+            color: var(--matrix-green);
+            margin: 20px 0;
+            border: 1px dashed var(--matrix-dark);
+            padding: 10px;
+        }
+        
+        /* Feedback Form Styles */
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            color: var(--matrix-pale);
+            font-size: 1.1rem;
+        }
+
+        .form-input, .form-textarea {
+            background: rgba(0, 20, 0, 0.5);
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            padding: 10px;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--matrix-dark);
+            opacity: 0.7;
+            margin-top: auto;
+            padding: 10px;
+            cursor: pointer;
+            animation: pulse-footer 2s infinite;
+            border-top: 1px solid var(--matrix-dark);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes pulse-footer {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            .builder-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            .welcome-logo {
+                font-size: 2.5rem;
+            }
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="container crt-flicker">
+        <!-- Welcome View -->
+        <div id="view-welcome" class="view active">
+            <div class="welcome-logo">
+                <div>ВКУСНО</div>
+                <div>И ТОЧКА</div>
+            </div>
+            <div class="welcome-text">
+                > СИСТЕМА ТЕРМИНАЛОВ САМООБСЛУЖИВАНИЯ v2.1<br>
+                > ПОДКЛЮЧЕНИЕ К МАТРИЦЕ ПИТАНИЯ... <span class="blink">УСПЕШНО</span>
+            </div>
+            <button class="btn-large" onclick="startOrder()">
+                [ ОФОРМИТЬ ЗАКАЗ ]
+            </button>
+            <button class="btn-large" style="font-size: 1.2rem; border-style: dashed;" onclick="openFeedback()">
+                [ СООБЩИТЬ О СБОЕ ]
+            </button>
+        </div>
+
+        <!-- Order View -->
+        <div id="view-order" class="view">
+            <header>
+                <div class="brand">ВКУСНО И ТОЧКА <span style="font-size: 0.8em; color: var(--matrix-dark);">// MATRIX_EDITION</span></div>
+                <div class="terminal-info">
+                    TERM_ID: #8842-A<br>
+                    USER: GUEST
+                </div>
+            </header>
+
+            <div class="main-layout">
+                <div class="menu-section">
+                    <div class="category-tabs">
+                        <button class="tab-btn active" onclick="setCategory('burgers')">БУРГЕРЫ</button>
+                        <button class="tab-btn" onclick="setCategory('snacks')">ЗАКУСКИ</button>
+                        <button class="tab-btn" onclick="setCategory('drinks')">НАПИТКИ</button>
+                    </div>
+                    <div id="products-grid" class="products-grid">
+                        <!-- Products rendered here -->
+                    </div>
+                </div>
+
+                <div class="cart-section">
+                    <div class="cart-title">ВАШ ЗАКАЗ</div>
+                    <div id="cart-items" class="cart-items">
+                        <div style="text-align: center; color: var(--matrix-dark); margin-top: 20px;">
+                            > КОРЗИНА ПУСТА
+                        </div>
+                    </div>
+                    <div class="cart-total">
+                        <div class="total-row">
+                            <span>ИТОГО:</span>
+                            <span id="total-price">0 РУБ</span>
+                        </div>
+                        <button id="checkout-btn" class="checkout-btn" onclick="submitOrder()" disabled>
+                            ПОДТВЕРДИТЬ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Builder View -->
+        <div id="view-builder" class="view">
+            <header>
+                <div class="brand">КОНСТРУКТОР БУРГЕРА <span style="font-size: 0.8em; color: var(--matrix-dark);">// BUILD_MODE</span></div>
+                <button class="tab-btn" onclick="closeBuilder()">[ ОТМЕНА ]</button>
+            </header>
+
+            <div class="builder-layout">
+                <div class="ingredients-panel">
+                    <div class="ingredient-category">
+                        <h3>[01] ОСНОВА</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Булка', 50)">
+                                Булка <span>50 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Булка с кунжутом', 40)">
+                                Кунжут <span>40 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Лист салата', 20)">
+                                Лист салата <span>20 РУБ</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ingredient-category">
+                        <h3>[02] НАЧИНКА</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Говядина', 120)">
+                                ГОВЯДИНА <span>120 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Курица', 100)">
+                                КУРИЦА <span>100 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Растит. мясо', 150)">
+                                Растит. мясо <span>150 РУБ</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ingredient-category">
+                        <h3>[03] ДОБАВКИ</h3>
+                        <div class="ingredient-grid">
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Сыр', 30)">
+                                СЫР <span>30 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Матричный соус', 20)">
+                                Соус сырный <span>20 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Огурчики', 20)">
+                                Огурчики <span>20 РУБ</span>
+                            </button>
+                            <button class="ingredient-btn" onclick="addBuilderIngredient('Бекон', 60)">
+                                Бекон <span>60 РУБ</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-panel">
+                    <div class="burger-visual">
+                        <canvas id="burgerCanvas" width="200" height="300"></canvas>
+                        <div id="builder-empty-state" style="color: var(--matrix-dark); position: absolute;">>> СЛОТ ПУСТ</div>
+                    </div>
+                    <div class="builder-total">
+                        СУММА: <span id="builder-price">0</span> РУБ
+                    </div>
+                    <div class="builder-controls">
+                        <button class="checkout-btn" onclick="resetBuilder()" style="font-size: 1rem; padding: 10px;">СБРОС</button>
+                        <button class="checkout-btn" onclick="confirmCustomBurger()" style="font-size: 1rem; padding: 10px; background: var(--matrix-dark); color: #000;">ГОТОВО</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback View -->
+        <div id="view-feedback" class="view">
+            <header>
+                <div class="brand">ОБРАТНАЯ СВЯЗЬ <span style="font-size: 0.8em; color: var(--matrix-dark);">// FEEDBACK_LOOP</span></div>
+                <button class="tab-btn" onclick="closeFeedback()">[ НАЗАД ]</button>
+            </header>
+
+            <div style="display: flex; justify-content: center; align-items: center; flex-grow: 1;">
+                <form action="https://getform.io/f/bqoqmdeb" method="POST" class="feedback-form">
+                    <div class="form-group">
+                        <label class="form-label">ИМЯ ОПЕРАТОРА:</label>
+                        <input type="text" name="name" class="form-input" placeholder="Введите имя..." required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">КАНАЛ СВЯЗИ (EMAIL):</label>
+                        <input type="email" name="email" class="form-input" placeholder="email@matrix.net" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ОПИСАНИЕ СБОЯ:</label>
+                        <textarea name="message" class="form-textarea" placeholder="Опишите проблему или предложение..." required></textarea>
+                    </div>
+                    
+                    <!-- Hidden fields -->
+                    <input type="hidden" name="terminal_id" value="8842-A">
+                    <input type="hidden" name="_gotcha" style="display:none !important">
+
+                    <button type="submit" class="btn-large" style="width: 100%; margin: 20px 0;">
+                        [ ОТПРАВИТЬ ДАННЫЕ ]
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Success Modal -->
+    <div id="modal-success" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title">ЗАКАЗ ПРИНЯТ</div>
+            <div class="modal-text">
+                ДАННЫЕ ОТПРАВЛЕНЫ НА КУХНЮ.<br>
+                ОЖИДАЙТЕ ВЫЗОВА.
+            </div>
+            <div class="order-number" id="order-number-display">A-001</div>
+            <button class="btn-large" onclick="resetSystem()">[ НОВЫЙ ЗАКАЗ ]</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        const fontSize = 16;
+        let columns = 0;
+        let rainDrops = [];
+
+        const initRain = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            const newDrops = [];
+            for (let x = 0; x < columns; x++) {  
+                newDrops[x] = (rainDrops[x] !== undefined) ? rainDrops[x] : Math.floor(Math.random() * 100) - 100; 
+            }
+            rainDrops = newDrops;
+        };
+
+        const drawRain = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            const chars = 'ВКУСНОИТОЧКА0123456789';
+            
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+        const products = [
+            { id: 1, category: 'burgers', name: 'Биг Хит', price: 189 },
+            { id: 2, category: 'burgers', name: 'Двойной Чизбургер', price: 145 },
+            { id: 3, category: 'burgers', name: 'Гранд Де Люкс', price: 205 },
+            { id: 4, category: 'burgers', name: 'Чикен Премьер', price: 175 },
+            { id: 5, category: 'burgers', name: 'CBO Burger', price: 65 },
+            { id: 6, category: 'burgers', name: 'Фиш Бургер', price: 169 },
+
+            { id: 10, category: 'snacks', name: 'Картофель Фри (Ср)', price: 89 },
+            { id: 11, category: 'snacks', name: 'Картофель по-деревенски', price: 99 },
+            { id: 12, category: 'snacks', name: 'Наггетсы (6 шт)', price: 85 },
+            { id: 13, category: 'snacks', name: 'Наггетсы (9 шт)', price: 115 },
+            { id: 14, category: 'snacks', name: 'Сырные палочки', price: 109 },
+            { id: 15, category: 'snacks', name: 'Острые крылышки', price: 249 },
+
+            { id: 20, category: 'drinks', name: 'Добрый Кола (0.5)', price: 99 },
+            { id: 21, category: 'drinks', name: 'Злой кола (0.49)', price: 99 },
+            { id: 22, category: 'drinks', name: 'Черноголовка (1)', price: 109 },
+            { id: 23, category: 'drinks', name: 'Капучино', price: 129 },
+            { id: 24, category: 'drinks', name: 'Латте', price: 129 },
+            { id: 25, category: 'drinks', name: 'Водка Аква Минерале', price: 79 }
+        ];
+
+        let cart = [];
+        let currentCategory = 'burgers';
+    
+        let builderLayers = [];
+        const MAX_LAYERS = 15;
+        const ingredientProps = {
+            'Булка': { color: '#E6A15C', h: 25, w: 140 },
+            'Булка с кунжутом': { color: '#F4C430', h: 25, w: 140 },
+            'Лист салата': { color: '#4CAF50', h: 10, w: 150 },
+            'Говядина': { color: '#8B4513', h: 20, w: 130 },
+            'Курица': { color: '#FFDEAD', h: 20, w: 130 },
+            'Растит. мясо': { color: '#556B2F', h: 20, w: 130 },
+            'Сыр': { color: '#FDD835', h: 8, w: 135 },
+            'Бекон': { color: '#B22222', h: 8, w: 125 },
+            'Матричный соус': { color: '#00FF41', h: 6, w: 120 },
+            'Огурчики': { color: '#006400', h: 8, w: 120 }
+        };
+        const viewWelcome = document.getElementById('view-welcome');
+        const viewOrder = document.getElementById('view-order');
+        const viewBuilder = document.getElementById('view-builder');
+        const viewFeedback = document.getElementById('view-feedback');
+        const productsGrid = document.getElementById('products-grid');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalPriceEl = document.getElementById('total-price');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const modalSuccess = document.getElementById('modal-success');
+        const orderNumberDisplay = document.getElementById('order-number-display');
+        
+        // Builder DOM
+        const burgerCanvas = document.getElementById('burgerCanvas');
+        const burgerCtx = burgerCanvas.getContext('2d');
+        const builderPriceEl = document.getElementById('builder-price');
+        const builderEmptyState = document.getElementById('builder-empty-state');
+
+        // Functions
+        function startOrder() {
+            viewWelcome.classList.remove('active');
+            viewOrder.classList.add('active');
+            renderProducts();
+        }
+
+        function openFeedback() {
+            viewWelcome.classList.remove('active');
+            viewFeedback.classList.add('active');
+        }
+
+        function closeFeedback() {
+            viewFeedback.classList.remove('active');
+            viewWelcome.classList.add('active');
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            
+            // Update tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(cat)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderProducts();
+        }
+
+        function renderProducts() {
+            productsGrid.innerHTML = '';
+            const filtered = products.filter(p => p.category === currentCategory);
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.onclick = () => addToCart(product);
+                card.innerHTML = `
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">${product.price} РУБ</div>
+                    <button class="add-btn">[ ДОБАВИТЬ ]</button>
+                `;
+                productsGrid.appendChild(card);
+            });
+            if (currentCategory === 'burgers') {
+                const builderCard = document.createElement('div');
+                builderCard.className = 'product-card special';
+                builderCard.onclick = openBuilder;
+                builderCard.innerHTML = `
+                    <div class="product-name">НОВИНКА: СОЗДАЙ СВОЙ БУРГЕР!</div>
+                    <div class="product-price">ОТ 0 РУБ</div>
+                    <button class="add-btn" style="background: var(--matrix-green); color: #000;">[ КОНСТРУКТОР ]</button>
+                `;
+                productsGrid.appendChild(builderCard);
+            }
+        }
+
+        function addToCart(product) {
+            cart.push(product);
+            renderCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div style="text-align: center; color: var(--matrix-dark); margin-top: 20px;">
+                        > КОРЗИНА ПУСТА
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    const el = document.createElement('div');
+                    el.className = 'cart-item';
+                    el.innerHTML = `
+                        <div class="cart-item-info">
+                            <span class="cart-item-name">${item.name}</span>
+                            <span class="cart-item-price">${item.price} РУБ</span>
+                        </div>
+                        <div class="cart-item-remove" onclick="removeFromCart(${index})">X</div>
+                    `;
+                    cartItemsContainer.appendChild(el);
+                });
+                checkoutBtn.disabled = false;
+            }
+
+            totalPriceEl.textContent = `${total} РУБ`;
+            
+            cartItemsContainer.scrollTop = cartItemsContainer.scrollHeight;
+        }
+
+        function submitOrder() {
+            const orderNum = 'A-' + Math.floor(Math.random() * 900 + 100);
+            orderNumberDisplay.textContent = orderNum;
+            modalSuccess.classList.add('open');
+        }
+
+        function resetSystem() {
+            cart = [];
+            renderCart();
+            modalSuccess.classList.remove('open');
+            viewOrder.classList.remove('active');
+            viewWelcome.classList.add('active');
+        }
+
+        function openBuilder() {
+            viewOrder.classList.remove('active');
+            viewBuilder.classList.add('active');
+            resetBuilder();
+        }
+
+        function closeBuilder() {
+            viewBuilder.classList.remove('active');
+            viewOrder.classList.add('active');
+        }
+
+        function resetBuilder() {
+            builderLayers = [];
+            renderBuilder();
+        }
+
+        function addBuilderIngredient(name, price) {
+            if (builderLayers.length >= MAX_LAYERS) {
+                alert('МАКСИМУМ СЛОТОВ!');
+                return;
+            }
+            builderLayers.push({ name, price, id: Date.now() });
+            renderBuilder();
+        }
+
+        function removeBuilderLayer() {
+            if (builderLayers.length > 0) {
+                builderLayers.pop();
+                renderBuilder();
+            }
+        }
+
+        function renderBuilder() {
+
+            const total = builderLayers.reduce((sum, l) => sum + l.price, 0);
+            builderPriceEl.textContent = total;
+
+            burgerCtx.clearRect(0, 0, burgerCanvas.width, burgerCanvas.height);
+            
+            if (builderLayers.length === 0) {
+                builderEmptyState.style.display = 'block';
+            } else {
+                builderEmptyState.style.display = 'none';
+                
+                let currentY = burgerCanvas.height - 20;
+                
+                builderLayers.forEach(layer => {
+                    const props = ingredientProps[layer.name] || { color: '#FFF', h: 10, w: 100 };
+                    const x = (burgerCanvas.width - props.w) / 2;
+                    
+          
+                    burgerCtx.fillStyle = 'rgba(0,0,0,0.5)';
+                    burgerCtx.fillRect(x + 2, currentY - props.h + 2, props.w, props.h);
+                    
+
+                    burgerCtx.fillStyle = props.color;
+                    burgerCtx.fillRect(x, currentY - props.h, props.w, props.h);
+                    
+  
+                    burgerCtx.strokeStyle = 'rgba(0,0,0,0.3)';
+                    burgerCtx.lineWidth = 1;
+                    burgerCtx.strokeRect(x, currentY - props.h, props.w, props.h);
+
+   
+                    if (layer.name === 'Булка с кунжутом') {
+                        burgerCtx.fillStyle = '#FFF8DC';
+                        for(let i=0; i<5; i++) {
+                            burgerCtx.fillRect(x + 20 + i*20, currentY - props.h + 5, 2, 2);
+                        }
+                    }
+
+                    currentY -= props.h;
+                });
+            }
+        }
+
+        function confirmCustomBurger() {
+            if (builderLayers.length === 0) {
+                alert('БУРГЕР ПУСТ!');
+                return;
+            }
+            
+            const total = builderLayers.reduce((sum, l) => sum + l.price, 0);
+            const customBurger = {
+                id: Date.now(),
+                name: 'МОЙ БУРГЕР',
+                price: total,
+                category: 'custom'
+            };
+            
+            addToCart(customBurger);
+            closeBuilder();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initRain();
+            window.addEventListener('resize', initRain);
+            setInterval(drawRain, 50);
+        });
+
+    </script>
+    <footer onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ/', '_blank')">учавствуй в розыгрыше и выйграй XIAOMI REDMI POCO x4 5G PRO MAX SAUDI CHICKEN MC NUGGETS
+        OLD SPICE M3 COMPETITION ULTRA SE с 18 камерами!
+    </footer>
+</body>
+</html>
