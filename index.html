@@ -12,26 +12,42 @@
             margin: 0;
             padding: 0;
             text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         h1 {
-            margin-top: 30px;
+            margin-bottom: 40px;
             color: #1b2b5f;
         }
 
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            padding: 40px;
+        /* Slider Styles */
+        .slider-wrapper {
+            position: relative;
             max-width: 1100px;
             margin: 0 auto;
+            padding: 0 50px; /* Space for buttons */
+            box-sizing: border-box;
+        }
+
+        .slider-container {
+            overflow: hidden;
+            border-radius: 20px;
+            padding: 20px 10px; /* Padding for shadows */
+        }
+
+        .slider-track {
+            display: flex;
+            gap: 25px;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .project-box {
+            flex: 0 0 calc(33.333% - 17px); /* 3 items visible (minus gap) */
             background-color: #fff;
             border-radius: 15px;
-            padding: 25px;
             height: 180px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
@@ -40,141 +56,388 @@
             font-size: 20px;
             font-weight: bold;
             text-decoration: none;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
         }
 
         .project-box:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            z-index: 2;
         }
 
+        /* Navigation Buttons */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: #1b2b5f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: background 0.3s, transform 0.2s;
+            z-index: 10;
+        }
+
+        .slider-btn:hover {
+            background: #2d448f;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-btn.prev { left: 0; }
+        .slider-btn.next { right: 0; }
+
+        /* Dots Pagination */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: #1b2b5f;
+            transform: scale(1.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .project-box {
+                flex: 0 0 calc(50% - 12.5px); /* 2 items */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .project-box {
+                flex: 0 0 100%; /* 1 item */
+            }
+            .slider-wrapper {
+                padding: 0 40px;
+            }
+        }
+
+        /* --- Card Styles --- */
+
+        /* 1. Taison */
         .taison {
             background: #f2e9dd; 
             color: #5a3b00;      
             border: 3px solid #ffb75e;
         }
 
+        /* 2. Gorod */
         .gorod {
             background: #dce8ff; 
             color: #0f2a70;
             border: 3px solid #5d7ee0;
         }
 
+        /* 3. Cars */
         .cars {
-            background: linear-gradient(
-                to bottom right,
-                #f2f2f2,
-                #d9d9d9,
-                #c7c7c7
-            );
+            background: linear-gradient(to bottom right, #f2f2f2, #d9d9d9, #c7c7c7);
             border: 3px solid #7a7a7a;
             color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.15),
-                        0 0 10px rgba(0,0,0,0.25);
-            font-size: 18px;
         }
 
-        .porsche {
-            background: linear-gradient(
-                135deg,
-                #3a3a3a,
-                #5a5a5a,
-                #8a1f1f
-            );
-            border: 3px solid #b33939;
-            color: #f2f2f2;
-            font-size: 22px;
+        /* 4. Tesla (Modified from Porsche) */
+        .tesla {
+            background: linear-gradient(135deg, #e0e0e0, #ffffff, #e0e0e0);
+            border: 3px solid #cc0000;
+            color: #cc0000;
+            font-family: 'Arial Black', sans-serif;
             letter-spacing: 1px;
         }
-
-        /* CYBERPUNK контейнер — неон + царапины */
-        .cyberpunk {
-            position: relative;
-            background: #fcee09;        /* фирменный жёлтый */
-            border: 3px solid #000;     /* черная рамка */
-            color: #000;
-            font-size: 24px;
-            font-weight: 900;           /* жирнее */
-            letter-spacing: 2px;
-
-            /* неоновая подсветка */
-            text-shadow: 
-                0 0 6px #00eaff,
-                0 0 12px #00eaff,
-                0 0 4px #000;
-
-            box-shadow:
-                0 0 20px rgba(255, 255, 0, 0.6),
-                inset 0 0 12px rgba(0, 0, 0, 0.25);
-
-            border-radius: 15px;
-            overflow: hidden; /* нужно для царапин */
+        .tesla::after {
+            content: "⚡";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 14px;
         }
 
-        /* "поцарапанный" эффект — легкий, ненавязчивый */
+        /* 5. Cyberpunk */
+        .cyberpunk {
+            background: #fcee09;
+            border: 3px solid #000;
+            color: #000;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 0 0 4px #00eaff;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
+        }
         .cyberpunk::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(115deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 1px, transparent 2px, transparent 4px);
             pointer-events: none;
-
-            background-image:
-                repeating-linear-gradient(
-                    115deg,
-                    rgba(0, 0, 0, 0.12) 0px,
-                    rgba(0, 0, 0, 0.12) 1px,
-                    transparent 4px,
-                    transparent 7px
-                );
-            opacity: 0.25; /* царапины нежные, не мешают тексту */
         }
 
-        .cyberpunk:hover {
-            transform: scale(1.05);
-            box-shadow:
-                0 0 28px rgba(255, 255, 0, 0.8),
-                inset 0 0 16px rgba(0, 0, 0, 0.35);
+        /* 6. Roscosmos (Cold War Style) */
+        .roscosmos {
+            background: #cc0000;
+            border: 3px solid #ffd700;
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+        .roscosmos::after {
+            content: "★";
+            display: block;
+            font-size: 24px;
+            margin-top: 5px;
+        }
+
+        /* 7 & 8. Matrix / JS */
+        .matrix {
+            background: #000;
+            border: 3px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        /* 8. Motivation */
+        .motivation {
+            background: linear-gradient(45deg, #090979, #00d4ff);
+            border: 3px solid #fff;
+            color: #fff;
+            font-style: italic;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        /* 9. Feedback (Matrix variant) */
+        .feedback {
+            background: #0d0d0d;
+            border: 3px solid #00ff00;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+        }
+        .feedback span {
+            color: #00ff00;
+        }
+
+        /* 10. jQuery */
+        .jquery {
+            background: #0769ad;
+            border: 3px solid #7acef4;
+            color: #fff;
+            font-weight: bold;
+        }
+        .jquery span {
+            color: #7acef4;
+        }
+
     </style>
 </head>
 <body>
 
 <h1>Мои проекты</h1>
 
-<div class="projects">
+<div class="slider-wrapper">
+    <button class="slider-btn prev" aria-label="Previous">❮</button>
+    
+    <div class="slider-container">
+        <div class="slider-track" id="track">
+            
+            <!-- 1. Taison -->
+            <a href="./1/" target="_blank" class="project-box taison">
+                🐱 Обязанности кота
+            </a>
 
-    <a href="./1/" target="_blank" class="project-box taison">
-        🐱 Обязанности кота
-    </a>
+            <!-- 2. Vitebsk -->
+            <a href="./2/" target="_blank" class="project-box gorod">
+                🌆 Город Витебск
+            </a>
 
-    <a href="./2/" target="_blank" class="project-box gorod">
-        🌆 Город Витебск
-    </a>
+            <!-- 3. Cars -->
+            <a href="./3/" class="project-box cars">
+                🚗 Сравнение авто
+            </a>
 
-    <a href="./3/" class="project-box cars">
-        Сравнение автомобилей
-    </a>
+            <!-- 4. Tesla -->
+            <a href="./4/" target="_blank" class="project-box tesla">
+                TESLA
+            </a>
 
-    <a href="./4/" target="_blank" class="project-box porsche">
-        Porsche
-    </a>
+            <!-- 5. Cyberpunk -->
+            <a href="./5/" target="_blank" class="project-box cyberpunk">
+                Найт-Сити
+            </a>
 
-    <!-- Новый Cyberpunk контейнер -->
-    <a href="./5/" target="_blank" class="project-box cyberpunk">
-        Найт-Сити
-    </a>
-<a href="./7/" target="_blank" class="project-box taison">
-        функции JS
-    </a>
-    <a href="./8/" target="_blank" class="project-box taison">
-        SHOW ME YOUR MOTIVATION!
-    </a>
+            <!-- 6. Roscosmos -->
+            <a href="./6/" target="_blank" class="project-box roscosmos">
+                РОСКОСМОС
+            </a>
+
+            <!-- 7. Matrix/JS -->
+            <a href="./7/" target="_blank" class="project-box matrix">
+                &lt;JS_Functions /&gt;
+            </a>
+
+            <!-- 8. Motivation -->
+            <a href="./8/" target="_blank" class="project-box motivation">
+                SHOW ME YOUR MOTIVATION!
+            </a>
+
+            <!-- 9. Feedback -->
+            <a href="./9/" target="_blank" class="project-box feedback">
+                <span>&gt;</span> Обратная связь
+            </a>
+
+            <!-- 10. jQuery -->
+            <a href="./10/" target="_blank" class="project-box jquery">
+                jQuery(<span>$</span>)
+            </a>
+
+        </div>
+    </div>
+
+    <button class="slider-btn next" aria-label="Next">❯</button>
+
+    <div class="slider-dots" id="dots"></div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const track = document.getElementById('track');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const dotsContainer = document.getElementById('dots');
+        const slides = document.querySelectorAll('.project-box');
+        
+        let currentIndex = 0;
+        let itemsPerView = 3;
+        let totalSlides = slides.length;
+        
+        // Update items per view based on screen width
+        function updateItemsPerView() {
+            if (window.innerWidth <= 600) itemsPerView = 1;
+            else if (window.innerWidth <= 900) itemsPerView = 2;
+            else itemsPerView = 3;
+            
+            updateSlider();
+            createDots();
+        }
+
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            const totalPages = Math.ceil(totalSlides / itemsPerView); // Or just totalSlides - itemsPerView + 1 for single step?
+            // Let's do simple pagination: one dot per possible start position? 
+            // Or one dot per "page"?
+            // Let's do one dot per slide for precise control, or one dot per page.
+            // User asked for "Slider", usually implies pages or single items.
+            // Let's do single item sliding.
+            
+            const maxIndex = totalSlides - itemsPerView;
+            const dotCount = maxIndex + 1;
+
+            // If too many dots, maybe simplify? 10 slides is fine.
+            for (let i = 0; i < dotCount; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === currentIndex) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    currentIndex = i;
+                    updateSlider();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateSlider() {
+            const maxIndex = totalSlides - itemsPerView;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex > maxIndex) currentIndex = maxIndex;
+
+            const slideWidth = 100 / itemsPerView; 
+            const slide = slides[0];
+            const style = window.getComputedStyle(track);
+            const gap = parseFloat(style.gap) || 0;
+            const moveAmount = (slide.offsetWidth + gap) * currentIndex;
+            
+            track.style.transform = `translateX(-${moveAmount}px)`;
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+
+            // Update buttons state
+            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+            
+            nextBtn.style.opacity = currentIndex === maxIndex ? '0.5' : '1';
+            nextBtn.style.pointerEvents = currentIndex === maxIndex ? 'none' : 'auto';
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlider();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const maxIndex = totalSlides - itemsPerView;
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateSlider();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevBtn.click();
+            if (e.key === 'ArrowRight') nextBtn.click();
+        });
+
+        // Touch support (Swipe)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        track.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        track.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextBtn.click();
+            if (touchEndX > touchStartX + 50) prevBtn.click();
+        }
+
+        // Init
+        window.addEventListener('resize', updateItemsPerView);
+        updateItemsPerView();
+    });
+</script>
 
 </body>
 </html>
